@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+{% load django_tables2 %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>{% if user.is_admin %}All Tickets{% elif user.is_technician %}My Assigned Tickets{% else %}My Tickets{% endif %}</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'create_ticket' %}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Create New Ticket
+        </a>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Tickets</h5>
+                <p class="card-text display-6">{{ total_tickets }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Open Tickets</h5>
+                <p class="card-text display-6">{{ open_tickets }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">In Progress</h5>
+                <p class="card-text display-6">{{ in_progress_tickets }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Resolved</h5>
+                <p class="card-text display-6">{{ resolved_tickets }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="mb-0">Ticket List</h5>
+            </div>
+            <div class="col-md-6 text-end">
+                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+                    <i class="bi bi-funnel"></i> Filters
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="collapse" id="filterCollapse">
+        <div class="card-body bg-light">
+            <form method="get" class="row g-3">
+                {% for field in filter_form %}
+                    <div class="col-md-4">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Apply Filters</button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Created</th>
+                        <th>Category</th>
+                        {% if user.is_admin or user.is_technician %}
+                            <th>Created By</th>
+                        {% endif %}
+                        {% if user.is_admin %}
+                            <th>Assigned To</th>
+                        {% endif %}
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in page_obj %}
+                        <tr>
+                            <td>#{{ ticket.id }}</td>
+                            <td>{{ ticket.title }}</td>
+                            <td>
+                                <span class="badge bg-{% if ticket.status == 'OPEN' %}warning{% elif ticket.status == 'IN_PROGRESS' %}info{% elif ticket.status == 'RESOLVED' %}success{% elif ticket.status == 'CLOSED' %}secondary{% else %}danger{% endif %}">
+                                    {{ ticket.get_status_display }}
+                                </span>
+                                {% if ticket.is_overdue %}
+                                    <span class="badge bg-danger">Overdue</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if ticket.priority == 1 %}
+                                    <span class="badge bg-danger">Critical</span>
+                                {% elif ticket.priority == 2 %}
+                                    <span class="badge bg-warning">High</span>
+                                {% elif ticket.priority == 3 %}
+                                    <span class="badge bg-primary">Medium</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">Low</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ ticket.created_at|date:"M d, Y" }}</td>
+                            <td>{{ ticket.category.name|default:"-" }}</td>
+                            {% if user.is_admin or user.is_technician %}
+                                <td>{{ ticket.created_by.get_full_name }}</td>
+                            {% endif %}
+                            {% if user.is_admin %}
+                                <td>{{ ticket.assigned_to.get_full_name|default:"-" }}</td>
+                            {% endif %}
+                            <td>
+                                <a href="{% url 'helpdesk:ticket_detail' ticket.id %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-eye"></i> View
+                                </a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">No tickets found</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if page_obj.paginator.num_pages > 1 %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">&laquo; First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">Previous</a>
+                        </li>
+                    {% endif %}
+                    
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <li class="page-item active">
+                                <a class="page-link" href="#">{{ num }}</a>
+                            </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ num }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">{{ num }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET %}&{{ request.GET.urlencode }}{% endif %}">Last &raquo;</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
