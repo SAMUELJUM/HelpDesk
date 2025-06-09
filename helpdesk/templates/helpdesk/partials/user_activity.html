@@ -1,0 +1,195 @@
+<div class="user-activity-feed">
+    <h5 class="mb-4 text-gray-800 font-weight-bold">
+        <i class="bi bi-clock-history mr-2"></i>My Recent Tickets
+    </h5>
+
+    {% if my_recent_tickets %}
+    <div class="activity-list">
+        {% for ticket in my_recent_tickets %}
+        <div class="activity-card shadow-sm mb-3">
+            <div class="activity-card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="badge
+                            {% if ticket.status == 'open' %}bg-danger
+                            {% elif ticket.status == 'in_progress' %}bg-warning
+                            {% else %}bg-success{% endif %}">
+                            {{ ticket.get_status_display }}
+                        </span>
+                        {% if ticket.assigned_to %}
+                        <span class="badge bg-info ml-2">
+                            <i class="bi bi-person-check"></i> {{ ticket.assigned_to.get_full_name|default:ticket.assigned_to.username }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    <small class="text-muted">{{ ticket.updated_at|timesince }} ago</small>
+                </div>
+                <h6 class="mt-2 mb-0">
+                    <a href="{% url 'helpdesk:ticket_detail' ticket.id %}" class="text-gray-800">
+                        #{{ ticket.id }} - {{ ticket.title }}
+                    </a>
+                </h6>
+            </div>
+
+            {% if ticket.latest_update %}
+            <div class="activity-card-update">
+                <div class="update-avatar">
+                    <span class="avatar-text bg-primary rounded-circle">
+                        {{ ticket.latest_update.author.username|first|upper }}
+                    </span>
+                </div>
+                <div class="update-content">
+                    <div class="update-meta">
+                        <strong>{{ ticket.latest_update.author.get_full_name|default:ticket.latest_update.author.username }}</strong>
+                        <small class="text-muted ml-2">{{ ticket.latest_update.created_at|timesince }} ago</small>
+                    </div>
+                    <div class="update-text">
+                        {{ ticket.latest_update.message|truncatechars:120 }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="activity-card-footer">
+                <a href="{% url 'helpdesk:ticket_detail' ticket.id %}" class="btn btn-sm btn-outline-primary">
+                    <i class="bi bi-eye"></i> View Details
+                </a>
+                {% if ticket.status != 'resolved' %}
+                <a href="{% url 'helpdesk:update_ticket' ticket.id %}" class="btn btn-sm btn-outline-secondary ml-2">
+                    <i class="bi bi-pencil"></i> Add Update
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="bi bi-inbox text-gray-400" style="font-size: 3rem;"></i>
+        </div>
+        <h5 class="empty-state-title text-gray-700">No tickets found</h5>
+        <p class="empty-state-text text-gray-500">
+            You haven't created any tickets yet. Get started by submitting your first ticket.
+        </p>
+        <a href="{% url 'helpdesk:create_ticket' %}" class="btn btn-primary mt-3">
+            <i class="bi bi-plus-circle"></i> Create New Ticket
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'helpdesk:my_tickets' %}" class="btn btn-primary btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="bi bi-list-ul"></i>
+            </span>
+            <span class="text">View All My Tickets</span>
+        </a>
+    </div>
+</div>
+
+<style>
+    .user-activity-feed {
+        padding: 1rem;
+    }
+
+    .activity-card {
+        background: white;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .activity-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0.5rem 1.5rem 0 rgba(58, 59, 69, 0.2) !important;
+    }
+
+    .activity-card-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e3e6f0;
+    }
+
+    .activity-card-update {
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: flex-start;
+        background-color: #f8f9fc;
+    }
+
+    .update-avatar {
+        margin-right: 1rem;
+    }
+
+    .update-content {
+        flex: 1;
+    }
+
+    .update-meta {
+        margin-bottom: 0.25rem;
+    }
+
+    .update-text {
+        color: #5a5c69;
+        font-size: 0.9rem;
+    }
+
+    .activity-card-footer {
+        padding: 0.75rem 1.5rem;
+        background-color: white;
+        border-top: 1px solid #e3e6f0;
+    }
+
+    .avatar-text {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        color: white;
+        font-weight: 600;
+        border-radius: 50%;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem 0;
+    }
+
+    .empty-state-icon {
+        margin-bottom: 1rem;
+    }
+
+    .empty-state-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state-text {
+        margin-bottom: 1rem;
+        color: #858796;
+    }
+
+    .btn-icon-split {
+        padding: 0.375rem 0.75rem;
+        position: relative;
+    }
+
+    .btn-icon-split .icon {
+        width: 2.5rem;
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.35rem 0 0 0.35rem;
+    }
+
+    .btn-icon-split .text {
+        padding-left: 2.5rem;
+    }
+</style>

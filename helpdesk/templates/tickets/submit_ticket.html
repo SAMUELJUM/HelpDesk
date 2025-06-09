@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Submit a Ticket{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h4><i class="bi bi-plus-circle me-2"></i> Submit a New Ticket</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                
+                <div class="mb-3">
+                    <label for="id_title" class="form-label">Title</label>
+                    {{ form.title|as_crispy_field }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_category" class="form-label">Category</label>
+                    {{ form.category|as_crispy_field }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_priority" class="form-label">Priority</label>
+                    {{ form.priority|as_crispy_field }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_description" class="form-label">Description</label>
+                    {{ form.description|as_crispy_field }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_attachment" class="form-label">Attachment (optional)</label>
+                    {{ form.attachment|as_crispy_field }}
+                </div>
+
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Submit Ticket
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

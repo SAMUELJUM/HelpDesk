@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0e4fee91-ed48-42bf-9fbd-421f2696dc8a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/HelpDesk.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/knowledgebase/templates/knowledgebase/article_confirm_delete.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/dashboards/admin_dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/dashboards/employee_dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/dashboards/technician_dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/employee_dashboard.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/helpdesk/manage_categories.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/helpdesk/partials/technician_activity.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/helpdesk/partials/user_activity.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/helpdesk/reports.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/knowledgebase/article_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/tickets/add_comment.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/tickets/assign_ticket.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/tickets/create_ticket.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/tickets/my_tickets.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/tickets/submit_ticket.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/tickets/ticket_detail.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/tickets/ticket_form.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/tickets/ticket_list.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/tickets/view_ticket.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/users/change_password.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/users/profile.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/templates/users/update.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/tickets/forms.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/tickets/templates/tickets/my_tickets.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/tickets/templates/view_ticket.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/tickets/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/helpdesk/users/decorators.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/helpdes/templates/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/helpdes/templates/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/helpdes/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/helpdes/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/helpdes/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/helpdes/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/helpdesk/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/helpdesk/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/helpdesk/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/helpdesk/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/helpdesk/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/helpdesk/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/knowledgebase/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/knowledgebase/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/knowledgebase/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/knowledgebase/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/knowledgebase/templates/knowledgebase/article_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/knowledgebase/templates/knowledgebase/article_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/knowledgebase/templates/knowledgebase/article_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/knowledgebase/templates/knowledgebase/article_list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/knowledgebase/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/knowledgebase/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/knowledgebase/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/knowledgebase/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/templates/base.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/templates/dashboard.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/templates/landing.html" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/templates/landing.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/templates/partials/navbar.html" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/templates/partials/navbar.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/templates/registration/logout.html" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/templates/registration/logout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/templates/registration/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/templates/registration/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/users/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/users/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/users/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/users/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/users/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/users/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpdesk/users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/helpdesk/users/views.py" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="CSS File" />
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/helpdesk" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2y3UNatMy4RUkh8y9fqlvFjEZF3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/USER/Desktop/HelpDesk/helpdesk/templates/dashboards&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\USER\Desktop\HelpDesk\helpdesk\templates\dashboards" />
+      <recent name="C:\Users\USER\Desktop\HelpDesk\helpdesk\templates" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\USER\Desktop\HelpDesk\helpdesk\tickets\templates\tickets" />
+      <recent name="C:\Users\USER\Desktop\HelpDesk\helpdesk\templates\tickets" />
+      <recent name="C:\Users\USER\Desktop\HelpDesk\helpdesk\templates\helpdesk" />
+      <recent name="C:\Users\USER\Desktop\HelpDesk\helpdesk\users\templates\users" />
+      <recent name="C:\Users\USER\Desktop\HelpDesk\helpdesk\users\users" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-PY-251.23774.444" />
+        <option value="bundled-python-sdk-890ed5b35930-d9c5bdb153f4-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-251.23774.444" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0e4fee91-ed48-42bf-9fbd-421f2696dc8a" name="Changes" comment="" />
+      <created>1749062714930</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1749062714930</updated>
+      <workItem from="1749062715622" duration="17850000" />
+      <workItem from="1749089019181" duration="9275000" />
+      <workItem from="1749138883723" duration="24616000" />
+      <workItem from="1749173651484" duration="76000" />
+      <workItem from="1749258961778" duration="21287000" />
+      <workItem from="1749314135359" duration="3949000" />
+      <workItem from="1749334817975" duration="33946000" />
+      <workItem from="1749397412944" duration="13545000" />
+      <workItem from="1749417149922" duration="33756000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

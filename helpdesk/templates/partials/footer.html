@@ -1,0 +1,30 @@
+<!-- helpdesk/templates/partials/footer.html -->
+<footer class="bg-dark text-white py-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>HelpDesk</h5>
+                <p>Your complete solution for support ticket management and knowledge base.</p>
+            </div>
+            <div class="col-md-4">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#features" class="text-white">Features</a></li>
+                    <li><a href="{% url 'knowledgebase:article_list' %}" class="text-white">Knowledge Base</a></li>
+                    <li><a href="{% url 'users:login' %}" class="text-white">Login</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h5>Contact</h5>
+                <address>
+                    <i class="bi bi-envelope"></i> kgtrh@support.org<br>
+                    <i class="bi bi-telephone"></i> 0708956980
+                </address>
+            </div>
+        </div>
+        <hr>
+        <div class="text-center">
+            <p class="mb-0">&copy; {% now "Y" %} HelpDesk. All rights reserved.</p>
+        </div>
+    </div>
+</footer>

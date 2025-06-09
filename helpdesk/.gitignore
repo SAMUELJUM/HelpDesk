@@ -1,0 +1,798 @@
+
+
+    Directory: C:\Users\USER\Desktop\HelpDesk\helpdesk
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a----          6/7/2025   5:20 PM              0 .gitignore
+
+
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>>
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -1.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.AcceptLineImpl(Boolean validate)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>>
+>> # OS-specific
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -36.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.SelfInsert(Nullable`1 key, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>>
+>> # OS-specific
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path .
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -36.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.SelfInsert(Nullable`1 key, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>>
+>> # OS-specific
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path .g
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -36.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.SelfInsert(Nullable`1 key, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>>
+>> # OS-specific
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path .gi
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -36.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.SelfInsert(Nullable`1 key, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>>
+>> # OS-specific
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path .git
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -36.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.SelfInsert(Nullable`1 key, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>>
+>> # OS-specific
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path .giti
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -36.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.SelfInsert(Nullable`1 key, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>>
+>> # OS-specific
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path .gitig
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -36.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.SelfInsert(Nullable`1 key, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>>
+>> # OS-specific
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path .gitign
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -36.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.SelfInsert(Nullable`1 key, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>>
+>> # OS-specific
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path .gitigno
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -36.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.SelfInsert(Nullable`1 key, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>>
+>> # OS-specific
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path .gitignor
+Oops, something went wrong.  Please report this bug with the details below.
+Report on GitHub: https://github.com/lzybkr/PSReadLine/issues/new
+-----------------------------------------------------------------------
+Last 200 Keys:
+ Space n o t Space s e r v e d Space b y Space a Space C D N Space o r Space d e d i c a t e d Space s e r v e r ) Enter
+ Enter
+ # Space O S - s p e c i f i c Enter
+ . D S _ S t o r e Enter
+ T h u m b s . d b Enter
+ Enter
+ # Space M y Space c u s t o m Space f i l e s Enter
+ # Space Y o u Space m i g h t Space a d d Space o t h e r Space s p e c i f i c Space f i l e s Space h e r e Space t h a t Space y o u Space d o n ' t Space w a n t Space t o Space t r a c k Enter
+ " @ Space | Space S e t - C o n t e n t Space - P a t h Space . g i t i g n o r e
+
+Exception:
+System.ArgumentOutOfRangeException: The value must be greater than or equal to zero and less than the console's buffer size in that dimension.
+Parameter name: top
+Actual value was -36.
+   at System.Console.SetCursorPosition(Int32 left, Int32 top)
+   at Microsoft.PowerShell.PSConsoleReadLine.ReallyRender(RenderData renderData, String defaultColor)
+   at Microsoft.PowerShell.PSConsoleReadLine.ForceRender()
+   at Microsoft.PowerShell.PSConsoleReadLine.Insert(Char c)
+   at Microsoft.PowerShell.PSConsoleReadLine.SelfInsert(Nullable`1 key, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.ProcessOneKey(ConsoleKeyInfo key, Dictionary`2 dispatchTable, Boolean ignoreIfNoAction, Object arg)
+   at Microsoft.PowerShell.PSConsoleReadLine.InputLoop()
+   at Microsoft.PowerShell.PSConsoleReadLine.ReadLine(Runspace runspace, EngineIntrinsics engineIntrinsics)
+-----------------------------------------------------------------------
+(.venv) PS C:\Users\USER\Desktop\HelpDesk\helpdesk> @"
+>> # Byte-compiled / optimized / DLL files
+>> __pycache__/
+>> *.pyc
+>> *.pyd
+>> *.so
+>>
+>> # C extensions
+>> *.dll
+>> *.nib
+>> *.so
+>>
+>> # Distribution / packaging
+>> .Python
+>> build/
+>> dist/
+>> eggs/
+>> *.egg-info/
+>> .installed.cfg
+>> *.egg
+>>
+>> # Editors
+>> .vscode/ # VS Code
+>> .idea/   # PyCharm
+>>
+>> # Environments
+>> venv/
+>> env/
+>> .env
+>>
+>> # Django
+>> *.log
+>> local_settings.py
+>> db.sqlite3
+>> media/ # User-uploaded files
+>> static/ # Collectstatic files (if not served by a CDN or dedicated server)
+>> .DS_Store
+>> Thumbs.db
+>>
+>> # My custom files
+>> # You might add other specific files here that you don't want to track
+>> "@ | Set-Content -Path .gitignore

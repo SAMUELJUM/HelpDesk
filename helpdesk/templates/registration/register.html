@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Register - HelpDesk</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 480px;
+            margin: 50px auto;
+            padding: 30px;
+            background: #f9fafb;
+            color: #333;
+        }
+        .card {
+            background: #fff;
+            padding: 35px 40px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #007cba;
+            text-align: center;
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 16px;
+            border: 1.8px solid #ddd;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        input[type="email"]:focus {
+            border-color: #007cba;
+            outline: none;
+            box-shadow: 0 0 6px rgba(0, 124, 186, 0.25);
+        }
+        .radio-group {
+            display: flex;
+            gap: 30px;
+            margin-top: 8px;
+        }
+        .radio-group label {
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+        }
+        input[type="radio"] {
+            accent-color: #007cba;
+            width: 18px;
+            height: 18px;
+        }
+        .messages {
+            margin-bottom: 20px;
+        }
+        .alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .errorlist {
+            color: #dc3545;
+            margin-top: 5px;
+            font-size: 14px;
+            list-style: none;
+            padding-left: 0;
+        }
+        button {
+            width: 100%;
+            background: #007cba;
+            border: none;
+            padding: 14px 0;
+            color: white;
+            font-size: 17px;
+            font-weight: 600;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #005a87;
+        }
+        .back-btn {
+            margin-top: 12px;
+            background: #6c757d;
+        }
+        .back-btn:hover {
+            background: #5a6268;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 15px;
+            color: #555;
+        }
+        .login-link a {
+            color: #007cba;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        small.help-text {
+            color: #6c757d;
+            display: block;
+            margin-top: 6px;
+            font-size: 13px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Create Your HelpDesk Account</h2>
+
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Username</label>
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Email</label>
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+
+            <div class="form-group">
+                <label>Register As</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="user_type" value="TECH"
+                            {% if request.POST.user_type == "TECH" %}checked{% endif %}>
+                        Technician
+                    </label>
+                    <label>
+                        <input type="radio" name="user_type" value="EMP"
+                            {% if request.POST.user_type == "EMP" or not request.POST.user_type %}checked{% endif %}>
+                        Employee
+                    </label>
+                </div>
+                {% if form.user_type.errors %}
+                    <ul class="errorlist">{{ form.user_type.errors }}</ul>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}">Password</label>
+                {{ form.password1 }}
+                {% if form.password1.help_text %}
+                    <small class="help-text">{{ form.password1.help_text }}</small>
+                {% endif %}
+                {{ form.password1.errors }}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+
+            <button type="submit">Register</button>
+            <button type="button" class="back-btn" onclick="window.location.href='{% url 'login' %}'">Back to Login</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="{% url 'login' %}">Login here</a>
+        </div>
+    </div>
+</body>
+</html>

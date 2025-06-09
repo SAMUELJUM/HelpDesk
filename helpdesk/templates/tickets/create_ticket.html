@@ -1,0 +1,340 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create New Ticket{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+    :root {
+        --primary-color: #4e73df;
+        --secondary-color: #f8f9fc;
+        --success-color: #1cc88a;
+        --info-color: #36b9cc;
+        --warning-color: #f6c23e;
+        --danger-color: #e74a3b;
+        --dark-color: #5a5c69;
+    }
+
+    .ticket-form-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .ticket-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #224abe 100%);
+        color: white;
+        border-radius: 0.35rem 0.35rem 0 0;
+        padding: 1.5rem;
+        margin-bottom: 0;
+    }
+
+    .ticket-card {
+        border: none;
+        border-radius: 0.35rem;
+        box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    }
+
+    .ticket-form-body {
+        padding: 2rem;
+    }
+
+    .form-control, .form-select {
+        border-radius: 0.35rem;
+        padding: 0.75rem 1rem;
+        border: 1px solid #d1d3e2;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: var(--dark-color);
+        margin-bottom: 0.5rem;
+    }
+
+    .priority-high {
+        color: var(--danger-color);
+        font-weight: 600;
+    }
+
+    .priority-medium {
+        color: var(--warning-color);
+        font-weight: 600;
+    }
+
+    .priority-low {
+        color: var(--info-color);
+        font-weight: 600;
+    }
+
+    .file-upload {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+    }
+
+    .file-upload-btn {
+        border: 1px dashed #d1d3e2;
+        border-radius: 0.35rem;
+        padding: 1.5rem;
+        text-align: center;
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .file-upload-btn:hover {
+        background-color: #f8f9fc;
+        border-color: var(--primary-color);
+    }
+
+    .file-upload-input {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+    }
+
+    .file-preview {
+        margin-top: 1rem;
+        display: none;
+    }
+
+    .file-preview-item {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        background-color: #f8f9fc;
+        border-radius: 0.35rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .file-preview-item .bi {
+        margin-right: 0.5rem;
+        color: var(--dark-color);
+    }
+
+    .remove-file {
+        margin-left: auto;
+        color: var(--danger-color);
+        cursor: pointer;
+    }
+
+    .submit-btn {
+        background-color: var(--primary-color);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .submit-btn:hover {
+        background-color: #2e59d9;
+        transform: translateY(-2px);
+    }
+
+    .cancel-btn {
+        background-color: var(--dark-color);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .cancel-btn:hover {
+        background-color: #4e525f;
+        transform: translateY(-2px);
+    }
+
+    .character-count {
+        font-size: 0.8rem;
+        color: #6c757d;
+        text-align: right;
+    }
+
+    .character-count.warning {
+        color: var(--warning-color);
+    }
+
+    .character-count.danger {
+        color: var(--danger-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="ticket-form-container">
+        <div class="ticket-card">
+            <div class="ticket-header">
+                <h2 class="h4 mb-0 text-white">
+                    <i class="bi bi-ticket-detailed"></i> Create New Support Ticket
+                </h2>
+                <p class="mb-0 text-white-50">Fill out the form below to submit your support request</p>
+            </div>
+            
+            <div class="ticket-form-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="id_title" class="form-label">Ticket Title</label>
+                            {{ form.title }}
+                            <small class="form-text text-muted">Briefly describe your issue</small>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="id_category" class="form-label">Category</label>
+                            {{ form.category }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label for="id_priority" class="form-label">Priority</label>
+                            {{ form.priority }}
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="id_department" class="form-label">Department</label>
+                            {{ form.department }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="id_description" class="form-label">Detailed Description</label>
+                        {{ form.description }}
+                        <div class="character-count" id="description-counter">0/2000 characters</div>
+                        <small class="form-text text-muted">Please provide as much detail as possible about your issue</small>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label">Attachments (Optional)</label>
+                        <div class="file-upload">
+                            <div class="file-upload-btn">
+                                <i class="bi bi-cloud-arrow-up fs-1 text-muted"></i>
+                                <p class="mb-1">Click to upload files or drag and drop</p>
+                                <p class="small text-muted mb-0">Maximum file size: 5MB</p>
+                                {{ form.attachment }}
+                            </div>
+                        </div>
+                        <div class="file-preview" id="file-preview">
+                            <!-- Files will be previewed here -->
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-5">
+                        <a href="{% if request.user.is_staff %}{% url 'tickets:ticket_list' %}{% else %}{% url 'helpdesk:my_tickets' %}{% endif %}" class="btn cancel-btn text-white">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn submit-btn text-white">
+                            <i class="bi bi-send"></i> Submit Ticket
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Character counter for description
+    const descriptionField = document.getElementById('id_description');
+    const counterElement = document.getElementById('description-counter');
+    
+    if (descriptionField && counterElement) {
+        descriptionField.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            counterElement.textContent = `${currentLength}/2000 characters`;
+            
+            // Change color based on length
+            if (currentLength > 1800) {
+                counterElement.classList.add('danger');
+                counterElement.classList.remove('warning');
+            } else if (currentLength > 1500) {
+                counterElement.classList.add('warning');
+                counterElement.classList.remove('danger');
+            } else {
+                counterElement.classList.remove('warning', 'danger');
+            }
+        });
+        
+        // Initialize counter
+        descriptionField.dispatchEvent(new Event('input'));
+    }
+    
+    // File upload preview
+    const fileInput = document.querySelector('.file-upload-input');
+    const filePreview = document.getElementById('file-preview');
+    
+    if (fileInput && filePreview) {
+        fileInput.addEventListener('change', function() {
+            filePreview.innerHTML = '';
+            
+            if (this.files.length > 0) {
+                filePreview.style.display = 'block';
+                
+                for (let i = 0; i < this.files.length; i++) {
+                    const file = this.files[i];
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-preview-item';
+                    
+                    fileItem.innerHTML = `
+                        <i class="bi bi-file-earmark"></i>
+                        <span>${file.name} (${formatFileSize(file.size)})</span>
+                        <span class="remove-file" data-index="${i}">&times;</span>
+                    `;
+                    
+                    filePreview.appendChild(fileItem);
+                }
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-file').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        removeFileFromInput(index);
+                    });
+                });
+            } else {
+                filePreview.style.display = 'none';
+            }
+        });
+    }
+    
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+    
+    function removeFileFromInput(index) {
+        const dt = new DataTransfer();
+        const input = document.querySelector('.file-upload-input');
+        
+        // Add all files except the one to be removed
+        for (let i = 0; i < input.files.length; i++) {
+            if (i !== index) {
+                dt.items.add(input.files[i]);
+            }
+        }
+        
+        // Update the input files
+        input.files = dt.files;
+        
+        // Trigger the change event to update the preview
+        input.dispatchEvent(new Event('change'));
+    }
+</script>
+{% endblock %}
