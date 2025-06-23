@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header Section with Gradient Background -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="bg-gradient-primary rounded-4 p-4 text-white position-relative overflow-hidden">
+                <div class="position-absolute top-0 end-0 opacity-10">
+                    <i class="fas fa-users" style="font-size: 8rem;"></i>
+                </div>
+                <div class="d-flex justify-content-between align-items-center position-relative">
+                    <div>
+                        <h2 class="mb-1 fw-bold">👥 User Management</h2>
+                        <p class="mb-0 opacity-75">Manage system users and their roles</p>
+                    </div>
+                    <a href="{% url 'helpdesk:admin_dashboard' %}"
+                       class="btn btn-light btn-lg rounded-pill px-4 shadow-sm hover-lift">
+                        <i class="fas fa-arrow-left me-2"></i>Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-0 shadow-sm rounded-4 bg-gradient-danger text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-crown fa-2x mb-2"></i>
+                    <h4 class="mb-1">{{ admin_count|default:0 }}</h4>
+                    <small class="opacity-75">Administrators</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-0 shadow-sm rounded-4 bg-gradient-info text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-tools fa-2x mb-2"></i>
+                    <h4 class="mb-1">{{ tech_count|default:0 }}</h4>
+                    <small class="opacity-75">Technicians</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-0 shadow-sm rounded-4 bg-gradient-secondary text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-user fa-2x mb-2"></i>
+                    <h4 class="mb-1">{{ employee_count|default:0 }}</h4>
+                    <small class="opacity-75">Employees</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-0 shadow-sm rounded-4 bg-gradient-success text-white">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-2x mb-2"></i>
+                    <h4 class="mb-1">{{ users.count|default:0 }}</h4>
+                    <small class="opacity-75">Total Users</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main User Table Card -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-white border-0 p-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-1 text-dark fw-bold">User Directory</h4>
+                            <p class="text-muted mb-0">Comprehensive list of all system users</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary rounded-pill px-3" data-bs-toggle="tooltip" title="Filter Users">
+                                <i class="fas fa-filter"></i>
+                            </button>
+                            <button class="btn btn-outline-secondary rounded-pill px-3" data-bs-toggle="tooltip" title="Export Data">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    {% if users %}
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+                                <thead class="bg-light border-0">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3 fw-semibold text-uppercase text-xs text-muted border-0">
+                                            <div class="d-flex align-items-center">
+                                                #
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 fw-semibold text-uppercase text-xs text-muted border-0">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-user me-2"></i>User
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 fw-semibold text-uppercase text-xs text-muted border-0">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-envelope me-2"></i>Contact
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 fw-semibold text-uppercase text-xs text-muted border-0">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-shield-alt me-2"></i>Role
+                                            </div>
+                                        </th>
+                                        <th scope="col" class="px-4 py-3 fw-semibold text-uppercase text-xs text-muted border-0">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-cog me-2"></i>Actions
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                        <tr class="border-0 user-row" style="transition: all 0.2s ease;">
+                                            <td class="px-4 py-4 border-0">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center"
+                                                         style="width: 35px; height: 35px;">
+                                                        <span class="text-primary fw-bold small">{{ forloop.counter }}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-4 border-0">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="avatar me-3">
+                                                        <div class="bg-gradient-primary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
+                                                             style="width: 45px; height: 45px;">
+                                                            {{ user.username|first|upper }}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h6 class="mb-0 fw-semibold text-dark">{{ user.username }}</h6>
+                                                        <small class="text-muted">
+                                                            {% if user.get_full_name %}
+                                                                {{ user.get_full_name }}
+                                                            {% else %}
+                                                                No full name set
+                                                            {% endif %}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-4 border-0">
+                                                <div>
+                                                    <div class="text-dark mb-1">
+                                                        <i class="fas fa-envelope text-muted me-2"></i>
+                                                        {% if user.email %}
+                                                            {{ user.email }}
+                                                        {% else %}
+                                                            <span class="text-muted">No email</span>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-4 border-0">
+                                                {% if user.is_superuser %}
+                                                    <span class="badge bg-gradient-danger px-3 py-2 rounded-pill">
+                                                        <i class="fas fa-crown me-1"></i>Administrator
+                                                    </span>
+                                                {% elif user.is_staff %}
+                                                    <span class="badge bg-gradient-info px-3 py-2 rounded-pill">
+                                                        <i class="fas fa-tools me-1"></i>Technician
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-gradient-secondary px-3 py-2 rounded-pill">
+                                                        <i class="fas fa-user me-1"></i>Employee
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="px-4 py-4 border-0">
+                                                <div class="btn-group" role="group">
+                                                    <a href="{% url 'helpdesk:user_detail' user.pk %}"
+                                                       class="btn btn-sm btn-outline-primary rounded-pill me-2 hover-lift"
+                                                       data-bs-toggle="tooltip" title="View Details">
+                                                        <i class="fas fa-eye me-1"></i>View
+                                                    </a>
+                                                    <a href="{% url 'helpdesk:user_update' user.pk %}"
+                                                       class="btn btn-sm btn-outline-warning rounded-pill hover-lift"
+                                                       data-bs-toggle="tooltip" title="Edit User">
+                                                        <i class="fas fa-edit me-1"></i>Edit
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <div class="mb-4">
+                                <i class="fas fa-users text-muted" style="font-size: 4rem; opacity: 0.3;"></i>
+                            </div>
+                            <h5 class="text-muted mb-2">No Users Found</h5>
+                            <p class="text-muted mb-4">There are currently no users in the system.</p>
+                            <button class="btn btn-primary rounded-pill px-4">
+                                <i class="fas fa-plus me-2"></i>Add First User
+                            </button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom CSS for enhanced styling */
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .bg-gradient-danger {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .bg-gradient-info {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .bg-gradient-secondary {
+        background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+    }
+
+    .hover-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .user-row:hover {
+        background-color: #f8f9ff !important;
+        transform: scale(1.001);
+    }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .table th {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    .avatar {
+        position: relative;
+    }
+
+    .avatar::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 12px;
+        height: 12px;
+        background: #28a745;
+        border: 2px solid white;
+        border-radius: 50%;
+    }
+
+    .text-xs {
+        font-size: 0.75rem;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card {
+        animation: fadeInUp 0.6s ease;
+    }
+
+    .user-row {
+        animation: fadeInUp 0.6s ease;
+    }
+
+    .user-row:nth-child(odd) {
+        animation-delay: 0.1s;
+    }
+
+    .user-row:nth-child(even) {
+        animation-delay: 0.2s;
+    }
+</style>
+
+<script>
+    // Initialize tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    });
+</script>
+{% endblock %}

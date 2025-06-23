@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+{% block title %}Technician Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    :root {
+        --bg: #f9fafb;
+        --text: #111827;
+        --card-bg: #ffffff;
+        --sidebar-bg: #1f2937;
+        --link-hover: #374151;
+        --table-head: #f1f5f9;
+        --badge-open: #facc15;
+        --badge-progress: #38bdf8;
+        --badge-resolved: #10b981;
+        --badge-closed: #9ca3af;
+        --badge-overdue: #ef4444;
+    }
+
+    body.dark {
+        --bg: #111827;
+        --text: #f9fafb;
+        --card-bg: #1f2937;
+        --sidebar-bg: #000000;
+        --link-hover: #374151;
+        --table-head: #1f2937;
+    }
+
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .sidebar {
+        background-color: var(--sidebar-bg);
+        padding: 30px 20px;
+        min-height: 100vh;
+        color: white;
+        width: 240px;
+    }
+
+    .sidebar h2 {
+        font-size: 24px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .sidebar a, .sidebar button {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 12px 10px;
+        margin: 10px 0;
+        border-radius: 6px;
+        transition: background-color 0.2s ease;
+    }
+
+    .sidebar a:hover, .sidebar button:hover {
+        background-color: var(--link-hover);
+    }
+
+    .main-content {
+        flex-grow: 1;
+        padding: 40px;
+    }
+
+    .toggle-btn {
+        background: #3b82f6;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+
+    .stats {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        margin-bottom: 30px;
+    }
+
+    .stat-box {
+        flex: 1;
+        min-width: 200px;
+        padding: 20px;
+        border-radius: 12px;
+        color: white;
+    }
+
+    .card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        transition: transform 0.2s;
+    }
+
+    .card:hover {
+        transform: translateY(-2px);
+    }
+
+    .table-container {
+        overflow-x: auto;
+        margin-top: 10px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table thead {
+        background: var(--table-head);
+    }
+
+    table th, table td {
+        padding: 14px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .badge {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+        display: inline-block;
+    }
+
+    .badge-open { background: var(--badge-open); color: #1f2937; }
+    .badge-progress { background: var(--badge-progress); color: #1f2937; }
+    .badge-resolved { background: var(--badge-resolved); color: white; }
+    .badge-closed { background: var(--badge-closed); color: white; }
+    .badge-overdue { background: var(--badge-overdue); color: white; margin-left: 6px; }
+
+    .actions a {
+        margin-right: 12px;
+        color: #3b82f6;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .actions a:hover {
+        text-decoration: underline;
+    }
+
+    .pagination {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .pagination a, .pagination span {
+        padding: 8px 14px;
+        border-radius: 6px;
+        text-decoration: none;
+        background-color: #e5e7eb;
+        color: #111827;
+        font-weight: 500;
+    }
+
+    .pagination span {
+        background-color: #3b82f6;
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            display: none;
+        }
+
+        .main-content {
+            padding: 20px;
+        }
+
+        .stats {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark');
+    }
+</script>
+
+<div style="display: flex; min-height: 100vh;">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>HelpDesk</h2>
+        <a href="{% url 'technician_dashboard' %}">Dashboard</a>
+        <a href="{% url 'my_tickets' %}">My Tickets</a>
+        <a href="{% url 'my_tickets' %}">My Assigned Tickets</a>
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <button class="toggle-btn" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p style="color: #6b7280;">Role: {{ user.get_role_display }}</p>
+
+        <div class="stats">
+            <div class="stat-box" style="background-color: #3b82f6;">
+                <h5>Total Assigned</h5>
+                <h2>{{ total_assigned }}</h2>
+            </div>
+            <div class="stat-box" style="background-color: #f59e0b;">
+                <h5>Open</h5>
+                <h2>{{ open_tickets }}</h2>
+            </div>
+            <div class="stat-box" style="background-color: #0ea5e9;">
+                <h5>In Progress</h5>
+                <h2>{{ in_progress_tickets }}</h2>
+            </div>
+            <div class="stat-box" style="background-color: #10b981;">
+                <h5>Resolved</h5>
+                <h2>{{ resolved_tickets }}</h2>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>My Assigned Tickets</h3>
+                {% if user.is_staff %}
+                <a href="{% url 'create_ticket' %}" style="background: #3b82f6; color: white; padding: 8px 16px; border-radius: 6px; text-decoration: none;">+ New Ticket</a>
+                {% endif %}
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Created</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in page_obj %}
+                        <tr>
+                            <td>#{{ ticket.id }}</td>
+                            <td>{{ ticket.title|truncatechars:40 }}</td>
+                            <td>
+                                <span class="badge
+                                    {% if ticket.status == 'OPEN' %}badge-open
+                                    {% elif ticket.status == 'IN_PROGRESS' %}badge-progress
+                                    {% elif ticket.status == 'RESOLVED' %}badge-resolved
+                                    {% elif ticket.status == 'CLOSED' %}badge-closed
+                                    {% endif %}">
+                                    {{ ticket.get_status_display }}
+                                </span>
+                                {% if ticket.is_overdue %}
+                                    <span class="badge-overdue">Overdue</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ ticket.get_priority_display }}</td>
+                            <td>{{ ticket.created_at|date:"M d, Y H:i" }}</td>
+                            <td>{{ ticket.category.name }}</td>
+                            <td class="actions">
+                                <a href="{% url 'ticket_detail' ticket.id %}">View</a>
+                                {% if user.is_staff or user == ticket.assigned_to %}
+                                <a href="{% url 'update_ticket' ticket.id %}" style="color: #f59e0b;">Update</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 20px;">No assigned tickets found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if page_obj.has_other_pages %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                {% endif %}
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <span>{{ num }}</span>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <a href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Next</a>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

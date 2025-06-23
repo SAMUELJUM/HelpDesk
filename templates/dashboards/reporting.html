@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports & Analytics{% endblock %}
+
+{% block content %}
+<style>
+    .card-hover:hover {
+        transform: translateY(-4px);
+        transition: all 0.3s ease;
+    }
+    .badge {
+        font-size: 0.9rem;
+    }
+    .section-title {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    .rounded-4 {
+        border-radius: 1rem !important;
+    }
+    .shadow-soft {
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05) !important;
+    }
+    .duration-filter {
+        background: #f8f9fa;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold display-6 text-primary">📊 Helpdesk Reports & Analytics</h2>
+        <p class="text-muted">A comprehensive view of ticket performance and system health</p>
+    </div>
+
+    <!-- Duration Filter Controls -->
+    <div class="duration-filter mb-4">
+        <form method="get" class="row g-3 align-items-center">
+            <div class="col-md-3">
+                <label for="period" class="form-label">Time Period</label>
+                <select name="period" id="period" class="form-select" onchange="toggleCustomDates()">
+                    <option value="1m" {% if duration_filter.period == '1m' %}selected{% endif %}>Last 1 Month</option>
+                    <option value="3m" {% if duration_filter.period == '3m' %}selected{% endif %}>Last 3 Months</option>
+                    <option value="6m" {% if duration_filter.period == '6m' %}selected{% endif %}>Last 6 Months</option>
+                    <option value="12m" {% if duration_filter.period == '12m' %}selected{% endif %}>Last 12 Months</option>
+                    <option value="custom" {% if duration_filter.period == 'custom' %}selected{% endif %}>Custom Range</option>
+                </select>
+            </div>
+
+            <div id="custom-dates" class="col-md-6 {% if duration_filter.period != 'custom' %}d-none{% endif %}">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" name="start_date" id="start_date" class="form-control"
+                               value="{{ request.GET.start_date|default:'' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="date" name="end_date" id="end_date" class="form-control"
+                               value="{{ request.GET.end_date|default:'' }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+                <a href="?period=12m" class="btn btn-link ms-2">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary shadow-soft card-hover rounded-4">
+                <div class="card-body text-center">
+                    <h6 class="text-uppercase">Total Tickets</h6>
+                    <h2 class="fw-bold">{{ total_tickets }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success shadow-soft card-hover rounded-4">
+                <div class="card-body text-center">
+                    <h6 class="text-uppercase">Resolved</h6>
+                    <h2 class="fw-bold">{{ resolved_tickets }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-dark bg-warning shadow-soft card-hover rounded-4">
+                <div class="card-body text-center">
+                    <h6 class="text-uppercase">Pending</h6>
+                    <h2 class="fw-bold">{{ pending_tickets }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-danger shadow-soft card-hover rounded-4">
+                <div class="card-body text-center">
+                    <h6 class="text-uppercase">Overdue</h6>
+                    <h2 class="fw-bold">{{ overdue_tickets }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <h4 class="section-title">📊 Tickets by Category</h4>
+                    <canvas id="categoryChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm rounded-4 h-100">
+                <div class="card-body">
+                    <h4 class="section-title">📈 Monthly Ticket Trends</h4>
+                    <canvas id="ticketChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Tickets Table -->
+    <div class="card mt-4 shadow-sm rounded-4">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="section-title mb-0">🕒 Recent Tickets</h4>
+                <a href="{% url 'export_reports_csv' %}?{{ request.GET.urlencode }}" class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-download me-2"></i>Export to CSV
+                </a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover table-striped align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Submitted By</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in recent_tickets %}
+                        <tr>
+                            <td>{{ ticket.id }}</td>
+                            <td>{{ ticket.title|truncatechars:40 }}</td>
+                            <td>{{ ticket.submitted_by.get_full_name|default:ticket.submitted_by.username }}</td>
+                            <td>
+                                {% if ticket.status == 'Resolved' %}
+                                    <span class="badge bg-success">{{ ticket.status }}</span>
+                                {% elif ticket.status == 'Pending' %}
+                                    <span class="badge bg-warning text-dark">{{ ticket.status }}</span>
+                                {% elif ticket.status == 'Overdue' %}
+                                    <span class="badge bg-danger">{{ ticket.status }}</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ ticket.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ ticket.created_at|date:"M d, Y" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No recent tickets found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Toggle custom date fields
+    function toggleCustomDates() {
+        const periodSelect = document.getElementById('period');
+        const customDates = document.getElementById('custom-dates');
+        customDates.classList.toggle('d-none', periodSelect.value !== 'custom');
+    }
+
+    // Line Chart for Monthly Trends
+    const ctx = document.getElementById('ticketChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ months|safe }},
+            datasets: [{
+                label: 'Tickets Created',
+                data: {{ counts|safe }},
+                backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                borderColor: '#0d6efd',
+                borderWidth: 3,
+                pointBackgroundColor: '#0d6efd',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+
+    // Bar Chart for Ticket Categories
+    const catCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(catCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ category_labels|safe }},
+            datasets: [{
+                label: 'Tickets per Category',
+                data: {{ category_counts|safe }},
+                backgroundColor: [
+                    'rgba(40, 167, 69, 0.6)',
+                    'rgba(255, 193, 7, 0.6)',
+                    'rgba(13, 110, 253, 0.6)',
+                    'rgba(220, 53, 69, 0.6)',
+                    'rgba(108, 117, 125, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(40, 167, 69, 1)',
+                    'rgba(255, 193, 7, 1)',
+                    'rgba(13, 110, 253, 1)',
+                    'rgba(220, 53, 69, 1)',
+                    'rgba(108, 117, 125, 1)'
+                ],
+                borderWidth: 1,
+                borderRadius: 6
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.raw}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

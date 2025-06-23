@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">{{ ticket.title }}</h4>
+        </div>
+        <div class="card-body">
+            <p><strong>Description:</strong><br> {{ ticket.description }}</p>
+            <p><strong>Status:</strong> {{ ticket.get_status_display }}</p>
+            <p><strong>Priority:</strong> {{ ticket.get_priority_display }}</p>
+            <p><strong>Category:</strong> {{ ticket.category }}</p>
+            <p><strong>Assigned To:</strong> {{ ticket.assigned_to|default:"Unassigned" }}</p>
+            <p><strong>Created By:</strong> {{ ticket.created_by }}</p>
+            <p><strong>Created At:</strong> {{ ticket.created_at|date:"M d, Y H:i" }}</p>
+            <a href="{% url 'tickets:ticket_update' ticket.pk %}" class="btn btn-sm btn-primary">Edit Ticket</a>
+            <a href="{% url 'tickets:ticket_list' %}" class="btn btn-sm btn-secondary">Back to List</a>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Comments</h5>
+        </div>
+        <div class="card-body">
+            {% for comment in ticket.comments.all %}
+                <div class="border-bottom mb-3 pb-2">
+                    <p class="mb-1">{{ comment.comment }}</p>
+                    <small class="text-muted">
+                        — {{ comment.commented_by.username }} on {{ comment.commented_at|date:"M d, Y H:i" }}
+                    </small>
+                </div>
+            {% empty %}
+                <p class="text-muted">No comments yet.</p>
+            {% endfor %}
+
+            <!-- Comment Form -->
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                {{ comment_form.as_p }}
+                <button type="submit" class="btn btn-outline-primary">Add Comment</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

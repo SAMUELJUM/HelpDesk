@@ -1,0 +1,402 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Tickets{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+    :root {
+        --primary-color: #4e73df;
+        --primary-hover: #2e59d9;
+        --secondary-color: #f8f9fc;
+        --success-color: #1cc88a;
+        --info-color: #36b9cc;
+        --warning-color: #f6c23e;
+        --danger-color: #e74a3b;
+        --dark-color: #5a5c69;
+        --light-color: #f8f9fa;
+        --border-radius: 0.35rem;
+        --box-shadow: 0 0.15rem 1.75rem rgba(58, 59, 69, 0.15);
+        --transition: all 0.3s ease;
+    }
+
+    body {
+        background-color: #f8f9fc;
+    }
+
+    .ticket-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .ticket-card {
+        border-radius: var(--border-radius);
+        overflow: hidden;
+        box-shadow: var(--box-shadow);
+        transition: var(--transition);
+    }
+
+    .ticket-card:hover {
+        box-shadow: 0 0.5rem 2rem rgba(58, 59, 69, 0.2);
+    }
+
+    .ticket-header {
+        background: linear-gradient(135deg, var(--primary-color), #224abe);
+        color: white;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .ticket-header h2 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+
+    .ticket-header p {
+        opacity: 0.9;
+        margin: 0.5rem 0 0;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .btn-light-primary {
+        background-color: rgba(255, 255, 255, 0.9);
+        color: var(--primary-color);
+        border: none;
+        transition: var(--transition);
+    }
+
+    .btn-light-primary:hover {
+        background-color: white;
+        color: var(--primary-hover);
+        transform: translateY(-2px);
+    }
+
+    .ticket-content {
+        background: white;
+        padding: 2rem;
+    }
+
+    .search-filter-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        align-items: center;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 250px;
+        border-radius: var(--border-radius);
+        border: 1px solid #ddd;
+        padding: 0.5rem 1rem;
+        transition: var(--transition);
+    }
+
+    .search-input:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+    }
+
+    .form-select {
+        max-width: 200px;
+        border-radius: var(--border-radius);
+    }
+
+    .filter-btn {
+        border-radius: var(--border-radius);
+    }
+
+    .ticket-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    .ticket-table thead th {
+        background-color: var(--secondary-color);
+        color: var(--dark-color);
+        font-weight: 600;
+        padding: 1rem;
+        border-bottom: 2px solid #e3e6f0;
+    }
+
+    .ticket-table tbody tr {
+        transition: var(--transition);
+    }
+
+    .ticket-table tbody tr:hover {
+        background-color: rgba(78, 115, 223, 0.05);
+    }
+
+    .ticket-table td {
+        padding: 1rem;
+        vertical-align: middle;
+        border-bottom: 1px solid #e3e6f0;
+    }
+
+    .badge-priority {
+        padding: 0.4em 0.75em;
+        border-radius: var(--border-radius);
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+    }
+
+    .priority-low { background-color: #d1ecf1; color: #0c5460; }
+    .priority-medium { background-color: #fff3cd; color: #856404; }
+    .priority-high { background-color: #f8d7da; color: #721c24; }
+
+    .status {
+        font-weight: 600;
+    }
+
+    .status-open { color: var(--success-color); }
+    .status-inprogress { color: var(--warning-color); }
+    .status-closed { color: var(--danger-color); }
+
+    .action-btn {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.85rem;
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+    }
+
+    .action-btn:hover {
+        transform: translateY(-1px);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem 0;
+        color: var(--dark-color);
+    }
+
+    .empty-state i {
+        font-size: 3rem;
+        opacity: 0.5;
+        margin-bottom: 1rem;
+    }
+
+    .pagination {
+        margin-top: 2rem;
+        justify-content: center;
+    }
+
+    .page-item.active .page-link {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .page-link {
+        color: var(--primary-color);
+    }
+
+    @media (max-width: 768px) {
+        .header-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .header-actions .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-filter-group {
+            flex-direction: column;
+        }
+
+        .search-input, .form-select {
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4 ticket-container animate__animated animate__fadeIn">
+    <div class="ticket-card">
+        <div class="ticket-header">
+            <div>
+                <h2><i class="bi bi-ticket-detailed"></i> My Support Tickets</h2>
+                <p>Manage and track all your support requests</p>
+            </div>
+            <div class="header-actions">
+                <a href="{% url 'tickets:my_tickets' %}" class="btn btn-light-primary">
+                    <i class="bi bi-list-ul"></i> My Tickets
+                </a>
+                <a href="{% url 'tickets:create_ticket' %}" class="btn btn-light-primary">
+                    <i class="bi bi-plus-circle"></i> New Ticket
+                </a>
+            </div>
+        </div>
+
+        <div class="ticket-content">
+            <!-- Search and Filter Section -->
+            <form method="get" class="search-filter-group">
+                <input type="text" name="search" class="form-control search-input"
+                       placeholder="Search tickets..." value="{{ request.GET.search }}"
+                       aria-label="Search tickets">
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="Open" {% if request.GET.status == "Open" %}selected{% endif %}>Open</option>
+                    <option value="In Progress" {% if request.GET.status == "In Progress" %}selected{% endif %}>In Progress</option>
+                    <option value="Closed" {% if request.GET.status == "Closed" %}selected{% endif %}>Closed</option>
+                </select>
+                <button type="submit" class="btn btn-primary filter-btn">
+                    <i class="bi bi-funnel"></i> Filter
+                </button>
+            </form>
+
+            <!-- Tickets Table -->
+            <div class="table-responsive">
+                <table class="ticket-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in tickets %}
+                        <tr>
+                            <td>
+                                <strong>{{ ticket.title|truncatechars:40 }}</strong>
+                                {% if ticket.description %}
+                                <small class="text-muted d-block">{{ ticket.description|truncatechars:60 }}</small>
+                                {% endif %}
+                            </td>
+                            <td>{{ ticket.category.name|default:"General" }}</td>
+                            <td>
+                                <span class="badge-priority
+                                    {% if ticket.priority == 'Low' %}priority-low
+                                    {% elif ticket.priority == 'Medium' %}priority-medium
+                                    {% elif ticket.priority == 'High' %}priority-high
+                                    {% endif %}">
+                                    {{ ticket.priority }}
+                                </span>
+                            </td>
+                            <td class="status status-{{ ticket.status|lower|cut:' ' }}">
+                                <i class="bi
+                                    {% if ticket.status == 'Open' %}bi-unlock
+                                    {% elif ticket.status == 'In Progress' %}bi-gear
+                                    {% elif ticket.status == 'Closed' %}bi-lock
+                                    {% endif %}"></i>
+                                {{ ticket.status }}
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ ticket.created_at|date:"M d, Y" }}</small>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    <a href="{% url 'tickets:view_ticket' ticket.id %}"
+                                       class="btn btn-sm btn-outline-primary action-btn"
+                                       title="View Ticket"
+                                       data-bs-toggle="tooltip">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    {% if ticket.status != 'Closed' %}
+                                    <a href="#" class="btn btn-sm btn-outline-success action-btn" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <i class="bi bi-inbox"></i>
+                                <h4>No tickets found</h4>
+                                <p>When you create tickets, they'll appear here</p>
+                                <a href="{% url 'tickets:create_ticket' %}" class="btn btn-primary mt-2">
+                                    <i class="bi bi-plus-circle"></i> Create Your First Ticket
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Ticket pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for i in paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == i %}active{% endif %}">
+                        <a class="page-link"
+                           href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                            {{ i }}
+                        </a>
+                    </li>
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.status %}&status={{ request.GET.status }}{% endif %}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+
+        // Add animation to table rows
+        const rows = document.querySelectorAll('.ticket-table tbody tr');
+        rows.forEach((row, index) => {
+            row.style.animationDelay = `${index * 0.05}s`;
+            row.classList.add('animate__animated', 'animate__fadeInUp');
+        });
+    });
+</script>
+{% endblock %}

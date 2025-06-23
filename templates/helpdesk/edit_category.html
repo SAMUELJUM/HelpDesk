@@ -1,0 +1,532 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Category{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --secondary-gradient: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+    --danger-gradient: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+    --card-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    --card-shadow-hover: 0 30px 80px rgba(0, 0, 0, 0.15);
+    --border-radius: 25px;
+    --animation-duration: 0.4s;
+    --glow-color: rgba(102, 126, 234, 0.4);
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(120, 219, 255, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(255, 119, 198, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 40% 60%, rgba(120, 119, 198, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .page-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    margin: 3rem auto;
+    max-width: 800px;
+    box-shadow: var(--card-shadow);
+    position: relative;
+  }
+
+  .page-container::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--primary-gradient);
+    border-radius: var(--border-radius);
+    z-index: -1;
+    opacity: 0.1;
+  }
+
+  .enhanced-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    transition: all var(--animation-duration) cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .enhanced-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  .card-header-gradient {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-header-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 1s ease;
+  }
+
+  .card-header-gradient:hover::before {
+    left: 100%;
+  }
+
+  .header-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .header-icon {
+    font-size: 2rem;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  .category-badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-left: auto;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .form-container {
+    padding: 3rem;
+  }
+
+  .form-group {
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  .form-label {
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .label-icon {
+    font-size: 1.2rem;
+    color: #667eea;
+  }
+
+  .form-control-modern {
+    width: 100%;
+    padding: 1.2rem 2rem;
+    border: 3px solid transparent;
+    border-radius: 20px;
+    font-size: 1rem;
+    transition: all var(--animation-duration) ease;
+    background: linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, #e1e8ed 0%, #f8f9fa 100%) border-box;
+    outline: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    resize: vertical;
+  }
+
+  .form-control-modern:focus {
+    background: linear-gradient(white, white) padding-box,
+                var(--primary-gradient) border-box;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px var(--glow-color);
+  }
+
+  .form-control-modern:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .form-select-modern {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 1rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 3rem;
+  }
+
+  .error-message {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(231, 76, 60, 0.1);
+    border-radius: 10px;
+    border-left: 4px solid #e74c3c;
+    animation: shake 0.5s ease-in-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 2px solid rgba(0, 0, 0, 0.05);
+  }
+
+  .modern-btn {
+    padding: 1rem 2.5rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all var(--animation-duration) ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 150px;
+    justify-content: center;
+  }
+
+  .modern-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+  }
+
+  .modern-btn:hover::before {
+    left: 100%;
+  }
+
+  .btn-back {
+    background: var(--secondary-gradient);
+    color: white;
+    box-shadow: 0 8px 25px rgba(116, 185, 255, 0.3);
+  }
+
+  .btn-back:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(116, 185, 255, 0.4);
+    color: white;
+  }
+
+  .btn-save {
+    background: var(--success-gradient);
+    color: white;
+    box-shadow: 0 8px 25px rgba(17, 153, 142, 0.3);
+  }
+
+  .btn-save:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(17, 153, 142, 0.4);
+  }
+
+  .floating-elements {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .floating-element {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .floating-element:nth-child(1) {
+    width: 80px;
+    height: 80px;
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+  }
+
+  .floating-element:nth-child(2) {
+    width: 60px;
+    height: 60px;
+    top: 70%;
+    right: 10%;
+    animation-delay: 2s;
+  }
+
+  .floating-element:nth-child(3) {
+    width: 40px;
+    height: 40px;
+    top: 40%;
+    left: 80%;
+    animation-delay: 4s;
+  }
+
+  @keyframes float {
+    0%, 100% { 
+      transform: translateY(0px); 
+      opacity: 0.5;
+    }
+    50% { 
+      transform: translateY(-20px); 
+      opacity: 0.8;
+    }
+  }
+
+  .fade-in {
+    animation: fadeIn 1s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .slide-in {
+    animation: slideIn 0.8s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .scale-in {
+    animation: scaleIn 0.6s ease-out;
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .page-container {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+    
+    .form-container {
+      padding: 2rem;
+    }
+    
+    .button-group {
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .modern-btn {
+      width: 100%;
+    }
+    
+    .header-title {
+      font-size: 1.4rem;
+      flex-direction: column;
+      text-align: center;
+      gap: 0.5rem;
+    }
+    
+    .category-badge {
+      margin-left: 0;
+      margin-top: 1rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .card-header-gradient {
+      padding: 2rem 1.5rem;
+    }
+    
+    .form-container {
+      padding: 1.5rem;
+    }
+    
+    .form-control-modern {
+      padding: 1rem 1.5rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-container fade-in">
+  <div class="floating-elements">
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+    <div class="floating-element"></div>
+  </div>
+  
+  <div class="enhanced-card scale-in">
+    <div class="card-header-gradient">
+      <div class="header-title">
+        <span class="header-icon">✏️</span>
+        <span>Edit Category</span>
+        <div class="category-badge">
+          {{ category.name }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-container">
+      <form method="post" class="slide-in">
+        {% csrf_token %}
+        
+        <div class="form-group">
+          <label for="id_name" class="form-label">
+            <span class="label-icon">🏷️</span>
+            Category Name
+          </label>
+          {{ form.name|add_class:"form-control-modern" }}
+          {% if form.name.errors %}
+            <div class="error-message">
+              <strong>⚠️ Error:</strong> {{ form.name.errors|first }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-group">
+          <label for="id_description" class="form-label">
+            <span class="label-icon">📝</span>
+            Description
+          </label>
+          {{ form.description|add_class:"form-control-modern" }}
+          {% if form.description.errors %}
+            <div class="error-message">
+              <strong>⚠️ Error:</strong> {{ form.description.errors|first }}
+            </div>
+          {% endif %}
+        </div>
+
+        {% if form.fields.default_assignee %}
+        <div class="form-group">
+          <label for="id_default_assignee" class="form-label">
+            <span class="label-icon">👤</span>
+            Default Assignee
+          </label>
+          {{ form.default_assignee|add_class:"form-control-modern form-select-modern" }}
+          {% if form.default_assignee.errors %}
+            <div class="error-message">
+              <strong>⚠️ Error:</strong> {{ form.default_assignee.errors|first }}
+            </div>
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="button-group">
+          <a href="{% url 'manage_categories' %}" class="modern-btn btn-back">
+            <span>←</span>
+            Back to Categories
+          </a>
+          <button type="submit" class="modern-btn btn-save">
+            <span>💾</span>
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Add focus animations to form inputs
+  const inputs = document.querySelectorAll('.form-control-modern');
+  
+  inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+      this.closest('.form-group').style.transform = 'translateX(5px)';
+    });
+    
+    input.addEventListener('blur', function() {
+      this.closest('.form-group').style.transform = 'translateX(0)';
+    });
+  });
+  
+  // Add form validation feedback
+  const form = document.querySelector('form');
+  form.addEventListener('submit', function(e) {
+    const submitBtn = form.querySelector('.btn-save');
+    submitBtn.innerHTML = '<span>⏳</span> Saving...';
+    submitBtn.style.background = 'linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%)';
+  });
+  
+  // Enhanced error handling
+  const errorMessages = document.querySelectorAll('.error-message');
+  errorMessages.forEach(error => {
+    error.style.animationDelay = '0.3s';
+  });
+  
+  // Smooth scroll behavior
+  document.documentElement.style.scrollBehavior = 'smooth';
+});
+</script>
+{% endblock %}

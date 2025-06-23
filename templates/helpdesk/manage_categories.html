@@ -1,0 +1,587 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Categories{% endblock %}
+
+{% block extra_css %}
+<style>
+  :root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --danger-gradient: linear-gradient(135deg, #fc466b 0%, #3f5efb 100%);
+    --dark-gradient: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    --card-shadow-hover: 0 25px 50px rgba(0, 0, 0, 0.15);
+    --border-radius: 20px;
+    --animation-duration: 0.4s;
+  }
+
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    position: relative;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .page-container {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius);
+    padding: 3rem;
+    margin: 2rem auto;
+    max-width: 1200px;
+    box-shadow: var(--card-shadow);
+  }
+
+  .page-title {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 3rem;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+  }
+
+  .page-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 5px;
+    background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+    border-radius: 3px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+
+  .enhanced-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--border-radius);
+    box-shadow: var(--card-shadow);
+    transition: all var(--animation-duration) cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    position: relative;
+  }
+
+  .enhanced-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transition: transform var(--animation-duration) ease;
+  }
+
+  .enhanced-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--card-shadow-hover);
+  }
+
+  .enhanced-card:hover::before {
+    transform: scaleX(1);
+  }
+
+  .card-header-gradient {
+    color: white;
+    padding: 2rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-header-gradient::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 1s ease;
+  }
+
+  .card-header-gradient:hover::before {
+    left: 100%;
+  }
+
+  .success-header {
+    background: var(--success-gradient);
+  }
+
+  .dark-header {
+    background: var(--dark-gradient);
+  }
+
+  .form-container {
+    padding: 2.5rem;
+  }
+
+  .input-with-button {
+    display: flex;
+    gap: 1.5rem;
+    align-items: end;
+  }
+
+  .modern-input {
+    flex: 1;
+    padding: 1.2rem 2rem;
+    border: 3px solid transparent;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    transition: all var(--animation-duration) ease;
+    background: linear-gradient(white, white) padding-box,
+                var(--primary-gradient) border-box;
+    outline: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  }
+
+  .modern-input:focus {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+  }
+
+  .modern-btn {
+    border: none;
+    color: white;
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all var(--animation-duration) ease;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .btn-add {
+    background: var(--success-gradient);
+    box-shadow: 0 8px 25px rgba(17, 153, 142, 0.3);
+  }
+
+  .btn-add:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 40px rgba(17, 153, 142, 0.4);
+  }
+
+  .modern-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.7s ease;
+  }
+
+  .modern-btn:hover::before {
+    left: 100%;
+  }
+
+  .table-container {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .modern-table {
+    margin: 0;
+    background: transparent;
+  }
+
+  .modern-table thead th {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: none;
+    padding: 2rem 1.5rem;
+    font-weight: 700;
+    color: #495057;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    position: relative;
+  }
+
+  .modern-table thead th::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--primary-gradient);
+    opacity: 0.3;
+  }
+
+  .modern-table tbody tr {
+    transition: all var(--animation-duration) ease;
+    border: none;
+    position: relative;
+  }
+
+  .modern-table tbody tr::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--primary-gradient);
+    transform: scaleY(0);
+    transition: transform var(--animation-duration) ease;
+  }
+
+  .modern-table tbody tr:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    transform: translateX(10px);
+  }
+
+  .modern-table tbody tr:hover::before {
+    transform: scaleY(1);
+  }
+
+  .modern-table tbody td {
+    padding: 2rem 1.5rem;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    vertical-align: middle;
+  }
+
+  .category-number {
+    background: var(--primary-gradient);
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  }
+
+  .category-name {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.1rem;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.8rem;
+    justify-content: flex-end;
+  }
+
+  .btn-sm {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all var(--animation-duration) ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: none;
+    cursor: pointer;
+  }
+
+  .btn-edit {
+    background: var(--warning-gradient);
+    color: white;
+    box-shadow: 0 5px 15px rgba(240, 147, 251, 0.3);
+  }
+
+  .btn-edit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(240, 147, 251, 0.4);
+    color: white;
+  }
+
+  .btn-delete {
+    background: var(--danger-gradient);
+    color: white;
+    box-shadow: 0 5px 15px rgba(252, 70, 107, 0.3);
+  }
+
+  .btn-delete:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(252, 70, 107, 0.4);
+    color: white;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 5rem 2rem;
+    color: #6c757d;
+  }
+
+  .empty-state-icon {
+    font-size: 5rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.4;
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .fade-in {
+    animation: fadeIn 1s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .slide-in {
+    animation: slideIn 0.8s ease-out;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .scale-in {
+    animation: scaleIn 0.6s ease-out;
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Confirmation Dialog Styling */
+  .swal2-popup {
+    border-radius: var(--border-radius) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+  }
+
+  @media (max-width: 768px) {
+    .page-container {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+
+    .page-title {
+      font-size: 2.2rem;
+    }
+
+    .input-with-button {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .btn-sm {
+      justify-content: center;
+    }
+
+    .modern-table thead th,
+    .modern-table tbody td {
+      padding: 1rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .modern-table {
+      font-size: 0.9rem;
+    }
+
+    .category-number {
+      width: 35px;
+      height: 35px;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-container fade-in">
+  <h1 class="page-title scale-in">
+    🗂️ Manage Ticket Categories
+  </h1>
+
+  <!-- Add Category Form -->
+  <div class="enhanced-card slide-in">
+    <div class="card-header-gradient success-header">
+      <div style="display: flex; align-items: center; gap: 0.8rem;">
+        <span style="font-size: 1.4rem;">✨</span>
+        Add New Category
+      </div>
+    </div>
+    <div class="form-container">
+      <form method="post">
+        {% csrf_token %}
+        <div class="input-with-button">
+          <input type="text"
+                 name="name"
+                 class="modern-input"
+                 placeholder="Enter category name..."
+                 required>
+          <button type="submit" class="modern-btn btn-add">
+            <span>➕</span>
+            Add Category
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Display Existing Categories -->
+  <div class="enhanced-card slide-in" style="animation-delay: 0.3s;">
+    <div class="card-header-gradient dark-header">
+      <div style="display: flex; align-items: center; gap: 0.8rem;">
+        <span style="font-size: 1.4rem;">📋</span>
+        Existing Categories
+      </div>
+    </div>
+    <div class="table-container">
+      {% if categories %}
+        <table class="table modern-table">
+          <thead>
+            <tr>
+              <th style="width: 100px;">#</th>
+              <th>Category Name</th>
+              <th style="width: 200px; text-align: center;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for category in categories %}
+              <tr class="scale-in" style="animation-delay: {{ forloop.counter0|add:4|floatformat:1 }}00ms;">
+                <td>
+                  <div class="category-number">{{ forloop.counter }}</div>
+                </td>
+                <td>
+                  <div class="category-name">{{ category.name }}</div>
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <a href="{% url 'edit_category' category.id %}" class="btn-sm btn-edit">
+                      <span>✏️</span>
+                      Edit
+                    </a>
+                    <a href="{% url 'helpdesk:delete_category' category.id %}"
+                       class="btn-sm btn-delete"
+                       onclick="return confirm('⚠️ Are you sure you want to delete this category?\n\nThis action cannot be undone!');">
+                      <span>🗑️</span>
+                      Delete
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="empty-state fade-in">
+          <div class="empty-state-icon">📂</div>
+          <h3 style="color: #6c757d; font-weight: 400; margin-bottom: 1rem;">No categories found</h3>
+          <p style="color: #adb5bd; margin: 0; font-size: 1.1rem;">Create your first category to get started!</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+// Enhanced confirmation dialog
+document.addEventListener('DOMContentLoaded', function() {
+  const deleteButtons = document.querySelectorAll('.btn-delete');
+
+  deleteButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      const categoryName = this.closest('tr').querySelector('.category-name').textContent;
+      const deleteUrl = this.getAttribute('href');
+
+      if (confirm(`⚠️ Delete Category: "${categoryName}"?\n\nThis action cannot be undone and may affect existing tickets.`)) {
+        window.location.href = deleteUrl;
+      }
+    });
+  });
+
+  // Add smooth scroll behavior
+  document.documentElement.style.scrollBehavior = 'smooth';
+
+  // Add entrance animations on scroll
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.scale-in, .slide-in, .fade-in').forEach(el => {
+    observer.observe(el);
+  });
+});
+</script>
+{% endblock %}

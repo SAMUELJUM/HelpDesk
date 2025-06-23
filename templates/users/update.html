@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Update User: {{ user_obj.username }}</h4>
+        </div>
+        <div class="card-body">
+            <form method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger small">
+                                {{ field.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'users:user_detail' user_obj.pk %}" class="btn btn-secondary">Back</a>
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

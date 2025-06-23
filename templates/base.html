@@ -28,6 +28,15 @@
         .footer {
             flex-shrink: 0;
         }
+        .profile-dropdown .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .profile-dropdown .dropdown-item i {
+            width: 20px;
+            text-align: center;
+        }
     </style>
 
     {% block extra_css %}{% endblock %}
@@ -36,7 +45,7 @@
     <div class="content-wrapper">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" href="{% url 'helpdesk:dashboard' %}">Helpdesk System</a>
+                <a class="navbar-brand" href="{% url 'tickets:dashboard' %}">Helpdesk System</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -44,21 +53,21 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'helpdesk:dashboard' %}">Dashboard</a>
+                            <a class="nav-link" href="{% url 'tickets:dashboard' %}">Dashboard</a>
                         </li>
                         {% if user.is_authenticated %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'helpdesk:create_ticket' %}">New Ticket</a>
+                                <a class="nav-link" href="{% url 'tickets:create_ticket' %}">New Ticket</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'knowledgebase:article_list' %}">Knowledge Base</a>
                             </li>
                             {% if user.is_admin %}
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'helpdesk:manage_categories' %}">Categories</a>
+                                    <a class="nav-link" href="{% url 'helpdes:manage_categories' %}">Categories</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'helpdesk:reports' %}">Reports</a>
+                                    <a class="nav-link" href="{% url 'helpdes:reports' %}">Reports</a>
                                 </li>
                             {% endif %}
                         {% endif %}
@@ -66,14 +75,27 @@
 
                     <ul class="navbar-nav">
                         {% if user.is_authenticated %}
-                            <li class="nav-item dropdown">
+                            <li class="nav-item dropdown profile-dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-                                    <i class="bi bi-person-circle"></i> {{ user.username }}
+                                    <i class="bi bi-person-circle"></i> {{ user.get_full_name|default:user.username }}
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
-                                    <li><a class="dropdown-item" href="#">Profile(coming soon)</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'users:profile' %}"><i class="bi bi-person"></i> My Profile</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'users:change_password' %}"><i class="bi bi-lock"></i> Change Password</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'tickets:my_tickets' %}"><i class="bi bi-ticket-detailed"></i> My Tickets</a></li>
+                                    {% if user.is_staff %}
                                     <li><hr class="dropdown-divider" /></li>
-                                    <li><a class="dropdown-item" href="{% url 'login' %}">Logout</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'admin:index' %}"><i class="bi bi-gear"></i> Admin Panel</a></li>
+                                    {% endif %}
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li>
+                                        <form method="post" action="{% url 'users:logout' %}" class="dropdown-item">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-link p-0 text-start w-100" style="text-decoration: none;">
+                                                <i class="bi bi-box-arrow-right"></i> Logout
+                                            </button>
+                                        </form>
+                                    </li>
                                 </ul>
                             </li>
                         {% else %}
@@ -81,7 +103,7 @@
                                 <a class="nav-link" href="{% url 'users:login' %}">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{% url 'helpdesk:register' %}">Register</a>
+                                <a class="nav-link" href="{% url 'register' %}">Register</a>
                             </li>
                         {% endif %}
                     </ul>

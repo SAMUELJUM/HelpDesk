@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg rounded-4">
+        <div class="card-header bg-primary text-white rounded-top-4">
+            <h4 class="mb-0">👤 User Details</h4>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Username:</strong> {{ user.username }}</li>
+                <li class="list-group-item"><strong>Full Name:</strong> {{ user.get_full_name }}</li>
+                <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+                <li class="list-group-item"><strong>Role:</strong>
+                    {% if user.is_superuser %}
+                        <span class="badge bg-danger">Admin</span>
+                    {% elif user.is_staff %}
+                        <span class="badge bg-info text-dark">Technician</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Employee</span>
+                    {% endif %}
+                </li>
+            </ul>
+            <div class="mt-4">
+                <a href="{% url 'helpdesk:manage_users' %}" class="btn btn-secondary me-2">🔙 Back</a>
+                <a href="{% url 'helpdesk:user_update' user.pk %}" class="btn btn-warning">✏️ Edit</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

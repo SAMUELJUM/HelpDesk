@@ -1,0 +1,153 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div style="display: flex; min-height: 100vh; font-family: 'Segoe UI', sans-serif; background: #f5f7fa;">
+    <!-- Sidebar -->
+    <div style="width: 220px; background: #1f2937; color: white; padding: 20px;">
+        <h2 style="margin-bottom: 30px;">HelpDesk</h2>
+        <ul style="list-style: none; padding: 0;">
+            <li><a href="{% url 'admin_dashboard' %}" style="color: #fff; text-decoration: none; display: block; margin: 15px 0;">Dashboard</a></li>
+            <li><a href="{% url 'manage_users' %}" style="color: #fff; text-decoration: none; display: block; margin: 15px 0;">Manage Users</a></li>
+            <li><a href="{% url 'reporting' %}" style="color: #fff; text-decoration: none; display: block; margin: 15px 0;">Reports</a></li>
+            <li><a href="{% url 'knowledgebase:article_list' %}" style="color: #fff; text-decoration: none; display: block; margin: 15px 0;">Knowledge Base</a></li>
+            <li>
+                <form action="{% url 'logout' %}" method="post" style="display: block; margin: 15px 0;">
+                    {% csrf_token %}
+                    <button type="submit" style="background: none; border: none; color: #fff; cursor: pointer; padding: 0; width: 100%; text-align: left;">
+                        Logout
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div style="flex-grow: 1; padding: 30px;">
+        <h1 style="margin-bottom: 10px;">Welcome, {{ user.username }}!</h1>
+        <p style="color: #6b7280;">Role: {{ user.get_role_display }}</p>
+
+        <!-- Ticket Stats -->
+        <div style="display: flex; gap: 20px; margin-top: 20px; margin-bottom: 30px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px; background: #3b82f6; color: white; padding: 20px; border-radius: 8px;">
+                <h5 style="margin: 0 0 10px 0;">Total Tickets</h5>
+                <h2 style="margin: 0;">{{ total_tickets }}</h2>
+            </div>
+            <div style="flex: 1; min-width: 200px; background: #f59e0b; color: white; padding: 20px; border-radius: 8px;">
+                <h5 style="margin: 0 0 10px 0;">Open</h5>
+                <h2 style="margin: 0;">{{ open_tickets }}</h2>
+            </div>
+            <div style="flex: 1; min-width: 200px; background: #0ea5e9; color: white; padding: 20px; border-radius: 8px;">
+                <h5 style="margin: 0 0 10px 0;">In Progress</h5>
+                <h2 style="margin: 0;">{{ in_progress_tickets }}</h2>
+            </div>
+            <div style="flex: 1; min-width: 200px; background: #10b981; color: white; padding: 20px; border-radius: 8px;">
+                <h5 style="margin: 0 0 10px 0;">Resolved</h5>
+                <h2 style="margin: 0;">{{ resolved_tickets }}</h2>
+            </div>
+        </div>
+
+        <!-- Tickets Table -->
+        <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h4 style="margin: 0;">All Tickets</h4>
+               <a href="{% url 'tickets:create_ticket' %}" style="background: #3b82f6; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;">Create New Ticket</a>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead style="background: #f3f4f6;">
+                        <tr>
+                            <th style="padding: 12px; text-align: left;">ID</th>
+                            <th style="padding: 12px; text-align: left;">Title</th>
+                            <th style="padding: 12px; text-align: left;">Status</th>
+                            <th style="padding: 12px; text-align: left;">Priority</th>
+                            <th style="padding: 12px; text-align: left;">Created</th>
+                            <th style="padding: 12px; text-align: left;">Category</th>
+                            <th style="padding: 12px; text-align: left;">Created By</th>
+                            <th style="padding: 12px; text-align: left;">Assigned To</th>
+                            <th style="padding: 12px; text-align: left;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ticket in page_obj %}
+                        <tr style="border-top: 1px solid #e5e7eb;">
+                            <td style="padding: 12px;">#{{ ticket.id }}</td>
+                            <td style="padding: 12px;">{{ ticket.title|truncatechars:30 }}</td>
+                            <td style="padding: 12px;">
+                                <span style="padding: 4px 8px; border-radius: 4px; background-color:
+                                    {% if ticket.status == 'OPEN' %}#facc15
+                                    {% elif ticket.status == 'IN_PROGRESS' %}#38bdf8
+                                    {% elif ticket.status == 'RESOLVED' %}#34d399
+                                    {% elif ticket.status == 'CLOSED' %}#9ca3af
+                                    {% else %}#ef4444{% endif %}; color: #1f2937;">
+                                    {{ ticket.get_status_display }}
+                                </span>
+                                {% if ticket.is_overdue %}
+                                    <span style="padding: 4px 6px; background: #ef4444; color: white; border-radius: 4px; margin-left: 5px;">Overdue</span>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 12px;">{{ ticket.get_priority_display }}</td>
+                            <td style="padding: 12px;">{{ ticket.created_at|date:"M d, Y H:i" }}</td>
+                            <td style="padding: 12px;">{{ ticket.category.name }}</td>
+                            <td style="padding: 12px;">{{ ticket.created_by.get_full_name|default:ticket.created_by.username }}</td>
+                            <td style="padding: 12px;">
+                                <form method="post" action="{% url 'assign_technician' ticket.id %}">
+                                    {% csrf_token %}
+                                    <select name="technician_id" onchange="this.form.submit()" style="padding: 6px; border-radius: 4px; width: 150px; border: 1px solid #d1d5db;">
+                                        <option value="">-- Assign --</option>
+                                        {% for tech in technicians %}
+                                            <option value="{{ tech.id }}" {% if ticket.assigned_to and tech.id == ticket.assigned_to.id %}selected{% endif %}>
+                                                {{ tech.get_full_name|default:tech.username }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </form>
+                            </td>
+                            <td style="padding: 12px;">
+                                <a href="{% url 'tickets:ticket_detail' ticket.id %}" style="color: #2563eb; text-decoration: none; margin-right: 10px;">View</a>
+                                {% if user.is_superuser or user == ticket.created_by %}
+                                <a href="{% url 'tickets:edit_ticket' ticket.id %}" style="color: #f59e0b; text-decoration: none;">Edit</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="9" style="text-align: center; padding: 20px;">No tickets found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <div style="margin-top: 20px; display: flex; justify-content: center;">
+                <nav>
+                    <ul style="list-style: none; display: flex; gap: 10px; padding: 0; margin: 0;">
+                        {% if page_obj.has_previous %}
+                            <li><a href="?page={{ page_obj.previous_page_number }}" style="padding: 6px 12px; background: #e5e7eb; border-radius: 4px; text-decoration: none;">Previous</a></li>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                            {% if page_obj.number == num %}
+                                <li><span style="padding: 6px 12px; background: #3b82f6; color: white; border-radius: 4px;">{{ num }}</span></li>
+                            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                <li><a href="?page={{ num }}" style="padding: 6px 12px; background: #e5e7eb; border-radius: 4px; text-decoration: none;">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li><a href="?page={{ page_obj.next_page_number }}" style="padding: 6px 12px; background: #e5e7eb; border-radius: 4px; text-decoration: none;">Next</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

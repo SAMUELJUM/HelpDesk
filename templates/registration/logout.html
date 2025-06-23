@@ -15,15 +15,21 @@
                             <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
                         </svg>
                     </div>
-                    <p class="mb-4">Thanks for using our Help Desk system. You have been successfully logged out.</p>
-                    
+                    <p class="mb-4">Thanks for using our Help Desk system. Your session has been completely terminated.</p>
+
                     <div class="d-grid gap-2">
-                        <a href="{% url 'login' %}" class="btn btn-primary">
-                            <i class="bi bi-box-arrow-in-right me-2"></i>Log In Again
+                        <a href="{% url 'landing' %}" class="btn btn-primary">
+                            <i class="bi bi-house-door me-2"></i>Return to Landing Page
                         </a>
-                        <a href="{% url 'helpdesk:dashboard' %}" class="btn btn-outline-secondary">
-                            <i class="bi bi-house-door me-2"></i>Return to Home
-                        </a>
+                        {% if not user.is_authenticated %}
+                        <script>
+                            // Clear any remaining client-side storage
+                            localStorage.clear();
+                            sessionStorage.clear();
+                            // Force a hard refresh to ensure all assets are reloaded
+                            window.location.href = "{% url 'landing_page' %}";
+                        </script>
+                        {% endif %}
                     </div>
                 </div>
             </div>

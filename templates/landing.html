@@ -1,6 +1,5 @@
-<!-- helpdesk/templates/landing.html -->
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
 <!-- Hero Section -->
 <section class="hero-section bg-primary text-white py-5">
@@ -14,10 +13,9 @@
                     <a href="#features" class="btn btn-outline-light btn-lg px-4">Learn More</a>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <img src="https://via.placeholder.com/600x400" alt="HelpDesk Dashboard" class="img-fluid rounded shadow">
-            </div>
-        </div>
+      <!--  <div class="col-lg-6">
+      <img src="{% static 'images/logo.jpg' %}" alt="HelpDesk Logo" class="img-fluid rounded shadow"></div>
+        </div> -->
     </div>
 </section>
 

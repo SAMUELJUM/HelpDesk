@@ -1,0 +1,185 @@
+<div class="activity-feed">
+    <h5 class="mb-4 text-gray-800 font-weight-bold">
+        <i class="bi bi-activity mr-2"></i>Recent Ticket Activity
+    </h5>
+
+    {% if recent_tickets %}
+    <div class="timeline">
+        {% for ticket in recent_tickets %}
+        <div class="timeline-item">
+            <div class="timeline-badge
+                {% if ticket.priority == 'high' %}bg-danger
+                {% elif ticket.priority == 'medium' %}bg-warning
+                {% else %}bg-info{% endif %}">
+                <i class="bi bi-ticket-detailed"></i>
+            </div>
+            <div class="timeline-card shadow-sm">
+                <div class="timeline-card-header">
+                    <div class="d-flex justify-content-between">
+                        <h6 class="font-weight-bold mb-0">
+                            <a href="{% url 'tickets:ticket_detail' ticket.id %}" class="text-gray-800">
+                                #{{ ticket.id }} - {{ ticket.title|truncatechars:40 }}
+                            </a>
+                        </h6>
+                        <small class="text-muted">{{ ticket.updated_at|timesince }} ago</small>
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge
+                            {% if ticket.status == 'open' %}bg-danger
+                            {% elif ticket.status == 'in_progress' %}bg-warning
+                            {% else %}bg-success{% endif %}">
+                            {{ ticket.get_status_display }}
+                        </span>
+                        <span class="badge
+                            {% if ticket.priority == 'high' %}bg-danger
+                            {% elif ticket.priority == 'medium' %}bg-warning
+                            {% else %}bg-info{% endif %}">
+                            {{ ticket.get_priority_display }}
+                        </span>
+                    </div>
+                </div>
+                <div class="timeline-card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="avatar avatar-sm mr-2">
+                            <span class="avatar-text bg-primary rounded-circle">
+                                {{ ticket.creator.username|first|upper }}
+                            </span>
+                        </div>
+                        <div>
+                            <small class="d-block text-gray-600">Created by {{ ticket.creator.get_full_name|default:ticket.creator.username }}</small>
+                            <small class="d-block text-gray-600">
+                                Assigned to: {{ ticket.assigned_to.get_full_name|default:ticket.assigned_to.username|default:"Unassigned" }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-card-footer">
+                    <a href="{% url 'tickets:ticket_detail' ticket.id %}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-eye"></i> View Details
+                    </a>
+                    {% if ticket.status != 'resolved' %}
+                    <a href="{% url 'tickets:update_ticket' ticket.id %}" class="btn btn-sm btn-outline-success ml-2">
+                        <i class="bi bi-pencil"></i> Update
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">
+            <i class="bi bi-inbox text-gray-400" style="font-size: 3rem;"></i>
+        </div>
+        <h5 class="empty-state-title text-gray-700">No recent activity</h5>
+        <p class="empty-state-text text-gray-500">
+            There are no recent tickets to display.
+        </p>
+        <a href="{% url 'tickets:create_ticket' %}" class="btn btn-primary mt-3">
+            <i class="bi bi-plus-circle"></i> Create New Ticket
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-4">
+        <a href="{% url 'tickets:ticket_list' %}" class="btn btn-primary btn-icon-split">
+            <span class="icon text-white-50">
+                <i class="bi bi-list-ul"></i>
+            </span>
+            <span class="text">View All Tickets</span>
+        </a>
+    </div>
+</div>
+
+<style>
+    .timeline {
+        position: relative;
+        padding-left: 3rem;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 2rem;
+    }
+
+    .timeline-badge {
+        position: absolute;
+        left: -1.5rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.25rem;
+        z-index: 2;
+    }
+
+    .timeline-card {
+        background: white;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .timeline-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0.5rem 1.5rem 0 rgba(58, 59, 69, 0.2) !important;
+    }
+
+    .timeline-card-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e3e6f0;
+    }
+
+    .timeline-card-body {
+        padding: 1rem 1.5rem;
+    }
+
+    .timeline-card-footer {
+        padding: 0.75rem 1.5rem;
+        background-color: #f8f9fc;
+        border-top: 1px solid #e3e6f0;
+    }
+
+    .avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .avatar-sm {
+        width: 2rem;
+        height: 2rem;
+        font-size: 0.875rem;
+    }
+
+    .avatar-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 2rem 0;
+    }
+
+    .empty-state-icon {
+        margin-bottom: 1rem;
+    }
+
+    .empty-state-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state-text {
+        margin-bottom: 1rem;
+    }
+</style>

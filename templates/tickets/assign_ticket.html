@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h4>Assign Ticket: {{ ticket.title }}</h4>
+
+    <!-- Debug section: Show count and list of technicians -->
+    <div class="alert alert-info">
+        <strong>{{ technicians|length }} technician(s) found:</strong>
+        <ul>
+            {% for tech in technicians %}
+                <li>{{ tech.get_full_name }} ({{ tech.username }})</li>
+            {% empty %}
+                <li>No technicians available.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="technician" class="form-label">Select Technician</label>
+            <select name="technician" id="technician" class="form-select">
+                {% for tech in technicians %}
+                    <option value="{{ tech.id }}">{{ tech.get_full_name }} ({{ tech.username }})</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Assign</button>
+        <a href="{% url 'tickets:ticket_detail' ticket.pk %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

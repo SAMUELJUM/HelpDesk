@@ -1,27 +1,24 @@
-from django.urls import path
+from django.urls import path, include
 from django.contrib.auth import views as auth_views
-from .views import register, user_update
 from . import views
-from .views import user_login, dashboard_redirect
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from .views import landing, manage_users
+from .views import change_password
+#from .. import users
 
 app_name = 'users'
 
 urlpatterns = [
     # Authentication URLs
-    path('register/', register, name='register'),
+    path('manage-users/', manage_users, name='manage_users'),
+    #path('user_management/', users.views.user_management, name='user_management'),
+    path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    #path('register/', views.register, name='register'),
-    path('login/', user_login, name='login'),
-    path('dashboard/', dashboard_redirect, name='dashboard'),
+    path('', views.landing, name='landing'),
+    path('logout/', auth_views.LogoutView.as_view(
+        next_page='landing'
+    ), name='logout'),
 
-    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='login'), name='logout'),
-    #path('logout/', views.logout_view, name='logout'),
-    # Password reset URLs
+    # Password Reset
     path('password-reset/',
          auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'),
          name='password_reset'),
@@ -34,14 +31,29 @@ urlpatterns = [
     path('password-reset-complete/',
          auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset_complete'),
+    path('change-password/', change_password, name='change_password'),
 
-    # Profile URLs
+    # Dashboard Redirect
+    path('dashboard/', views.dashboard_redirect, name='dashboard'),
+    path('redirect/', views.role_based_redirect, name='role_redirect'),
+
+    # Role-Based Dashboards
+    path('dashboard/admin', views.admin_dashboard, name='admin_dashboard'),
+    path('dashboard/technician', views.technician_dashboard, name='technician_dashboard'),
+    path('employee/dashboard', views.employee_dashboard, name='employee_dashboard'),
+
+    # Profile
     path('profile/', views.profile, name='profile'),
-    path('profile/update/', views.profile, name='profile_update'),
+    path('profile/update/', views.profile, name='profile_update'),  # You can create a dedicated view later
 
-    # User management URLs (for admin/technicians)
-    path('users/', views.user_list, name='user_list'),
-    path('users/<int:pk>/', views.user_detail, name='user_detail'),
-    path('users/<int:pk>/update/', views.user_update, name='user_update'),
-    path('users/<int:pk>/update/', user_update, name='user_update'),
+    # User Management
+    path('users/', views.user_list_view, name='user_list'),
+    path('users/<int:pk>/', views.user_detail_view, name='user_detail'),
+    path('users/<int:pk>/update/', views.user_update_view, name='user_update'),
+    path('tickets/', include('tickets.urls')),
+    path('tickets/<int:pk>/', views.ticket_detail, name='ticket_detail'),
+    path('my-tickets/', views.my_tickets_view, name='my_tickets'),
+    path('tickets/', views.ticket_list, name='ticket_list'),
+
+
 ]

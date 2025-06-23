@@ -1,0 +1,470 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Knowledge Base - Articles{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 300% 300%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease-in-out infinite;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .search-box:focus {
+            border-color: #4ecdc4;
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+            transform: scale(1.02);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .category-tag {
+            padding: 8px 20px;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            border: none;
+            border-radius: 25px;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .category-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(45deg, #fecfef, #ff9a9e);
+        }
+
+        .category-tag.active {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .articles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .article-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .article-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .article-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 300% 100%;
+            animation: gradientMove 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .article-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background: linear-gradient(45deg, #ffecd2, #fcb69f);
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            color: #666;
+        }
+
+        .article-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .article-excerpt {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .article-date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .article-views {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .read-more {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .read-more:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .no-articles {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+
+        .no-articles h3 {
+            color: #666;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .no-articles p {
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 3rem;
+        }
+
+        .pagination a, .pagination span {
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .pagination .current {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .articles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .categories {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+
+    <div class="container">
+        <div class="header">
+            <h1>📚 Knowledge Base</h1>
+            <p>Find answers to your questions and explore our comprehensive help articles</p>
+
+            <div class="search-container">
+                <form method="GET" action="{% url 'articles' %}">
+                    <input type="text" name="search" class="search-box" placeholder="Search articles..." value="{{ request.GET.search }}">
+                    <button type="submit" class="search-btn">🔍</button>
+                </form>
+            </div>
+
+            <div class="categories">
+                <a href="{% url 'articles' %}" class="category-tag {% if not current_category %}active{% endif %}">All Articles</a>
+                {% for category in categories %}
+                    <a href="{% url 'articles' %}?category={{ category.slug }}" class="category-tag {% if current_category == category.slug %}active{% endif %}">
+                        {{ category.name }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
+        {% if articles %}
+            <div class="articles-grid">
+                {% for article in articles %}
+                    <div class="article-card" onclick="location.href='{% url 'article_detail' article.slug %}'">
+                        {% if article.category %}
+                            <div class="article-category">{{ article.category.name }}</div>
+                        {% endif %}
+
+                        <h3 class="article-title">{{ article.title }}</h3>
+
+                        <div class="article-excerpt">
+                            {{ article.excerpt|truncatewords:25 }}
+                        </div>
+
+                        <div class="article-meta">
+                            <div class="article-date">
+                                📅 {{ article.created_at|date:"M d, Y" }}
+                            </div>
+                            <div class="article-views">
+                                👁️ {{ article.views|default:0 }} views
+                            </div>
+                        </div>
+
+                        <a href="{% url 'article_detail' article.slug %}" class="read-more">Read More →</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-articles">
+                <h3>🔍 No Articles Found</h3>
+                <p>{% if request.GET.search %}No articles match your search "{{ request.GET.search }}".{% else %}No articles available at the moment.{% endif %}</p>
+            </div>
+        {% endif %}
+
+        {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">« First</a>
+                    <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">‹ Previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                </span>
+
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">Next ›</a>
+                    <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}">Last »</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Add smooth scrolling and enhanced interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate cards on scroll
+            const cards = document.querySelectorAll('.article-card');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = Math.random() * 0.3 + 's';
+                        entry.target.classList.add('animate');
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+
+            // Add ripple effect to buttons
+            const buttons = document.querySelectorAll('.read-more, .search-btn, .category-tag');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+
+                    this.appendChild(ripple);
+
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            transform: scale(0);
+            animation: rippleEffect 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes rippleEffect {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+    </style>
+</body>
+</html>
+
+{% endblock %}

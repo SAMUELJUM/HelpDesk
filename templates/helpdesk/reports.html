@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load duration_filters %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="text-primary fw-bold">📊 Ticket Reports</h1>
+    <div>
+      <a href="{% url 'export_reports_csv' %}" class="btn btn-outline-success me-2">⬇ Export CSV</a>
+      <a href="{% url 'helpdes:reports' %}" class="btn btn-outline-secondary me-2">🔄 Refresh</a>
+      <a href="{% url 'dashboard' %}" class="btn btn-outline-dark">🏠 Back to Dashboard</a>
+    </div>
+  </div>
+
+  <!-- Tickets by Status -->
+  <div class="row mb-4">
+    {% for item in tickets_by_status %}
+    <div class="col-md-3 mb-3">
+      <div class="card text-white shadow
+        {% if item.status == 'OPEN' %}bg-warning
+        {% elif item.status == 'IN_PROGRESS' %}bg-info
+        {% elif item.status == 'RESOLVED' %}bg-success
+        {% elif item.status == 'CLOSED' %}bg-secondary
+        {% else %}bg-dark{% endif %}">
+        <div class="card-body text-center">
+          <h5 class="card-title">{{ item.status|capfirst }}</h5>
+          <p class="display-6 fw-bold">{{ item.count }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Tickets by Category -->
+  <div class="card mb-5 shadow">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">📂 Tickets by Category</h5>
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for item in tickets_by_category %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>{{ item.category__name|default:"Uncategorized" }}</span>
+        <span class="badge bg-primary rounded-pill">{{ item.count }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Technician Performance -->
+  <div class="card shadow">
+    <div class="card-header bg-success text-white">
+      <h5 class="mb-0">🛠️ Technician Performance</h5>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Technician</th>
+            <th>Total Tickets</th>
+            <th>Resolved</th>
+            <th>Avg. Time to Resolve</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in tickets_by_technician %}
+          <tr>
+            <td>{{ item.assigned_to__username|default:"N/A" }}</td>
+            <td>{{ item.total }}</td>
+            <td>{{ item.resolved }}</td>
+            <td>
+              {% if item.avg_time %}
+                {{ item.avg_time|format_timedelta }}
+              {% else %}
+                <span class="text-muted">N/A</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="text-center text-muted">No technician data available.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

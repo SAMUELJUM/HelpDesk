@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    .dashboard {
+        display: flex;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 220px;
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        padding: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar h2 {
+        margin-top: 0;
+        color: #fff;
+        font-size: 1.5em;
+        margin-bottom: 1.5rem;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sidebar ul li {
+        margin: 15px 0;
+    }
+
+    .sidebar ul li a {
+        color: #ecf0f1;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        border-radius: 8px;
+        transition: background 0.3s ease;
+    }
+
+    .sidebar ul li a:hover,
+    .sidebar ul li a.active {
+        background-color: #3498db;
+    }
+
+    .main-content {
+        flex-grow: 1;
+        padding: 30px;
+        background-color: #fff;
+    }
+
+    .main-content h2 {
+        font-size: 1.75rem;
+        margin-bottom: 20px;
+        color: #2c3e50;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    table thead {
+        background-color: #3498db;
+        color: white;
+    }
+
+    table th, table td {
+        padding: 14px 20px;
+        text-align: left;
+    }
+
+    table tbody tr {
+        border-bottom: 1px solid #eee;
+    }
+
+    table tbody tr:hover {
+        background-color: #f9f9f9;
+    }
+
+    a {
+        color: #3498db;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .welcome {
+        padding: 30px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .welcome h1 {
+        font-size: 2rem;
+        color: #2c3e50;
+    }
+
+    .welcome p {
+        font-size: 1rem;
+        color: #555;
+    }
+
+    .logout-button {
+        margin-top: 20px;
+    }
+
+    .logout-button form {
+        display: inline;
+    }
+
+    .logout-button button {
+        background-color: #e74c3c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .logout-button button:hover {
+        background-color: #c0392b;
+    }
+</style>
+
+<div class="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>HelpDesk</h2>
+        <ul>
+            <li><a href="{% url 'employee_dashboard' %}" class="active">Dashboard</a></li>
+            <li><a href="{% url 'submit_ticket' %}">Submit a Ticket</a></li>
+        </ul>
+
+        <div class="logout-button">
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit"><i class="bi bi-box-arrow-left"></i> Logout</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="welcome">
+            <h1>Welcome, {{ user.username }}!</h1>
+            <p>Role: {{ user.get_role_display }}</p>
+        </div>
+
+        <h2>Your Submitted Tickets</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Subject</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                    <th>Assigned To</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                <tr>
+                    <td>{{ ticket.id }}</td>
+                    <td>{{ ticket.subject }}</td>
+                    <td>{{ ticket.status }}</td>
+                    <td>{{ ticket.created_at|date:"M d, Y H:i" }}</td>
+                    <td>{{ ticket.assigned_to|default:"Unassigned" }}</td>
+                    <td><a href="{% url 'ticket_detail' ticket.id %}">View</a></td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">You have not submitted any tickets yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,702 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Create New Ticket{% endblock %}
+
+{% block extra_css %}
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .ticket-form-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .ticket-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin-bottom: 30px;
+        transition: all 0.3s ease;
+    }
+
+    .ticket-card:hover {
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        transform: translateY(-2px);
+    }
+
+    .ticket-header {
+        background: linear-gradient(135deg, #4b7bec 0%, #3742fa 100%);
+        padding: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .ticket-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .ticket-header h2 {
+        position: relative;
+        z-index: 2;
+        margin-bottom: 8px;
+        font-weight: 700;
+        font-size: 1.8rem;
+    }
+
+    .ticket-header p {
+        position: relative;
+        z-index: 2;
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+
+    .ticket-form-body {
+        padding: 40px;
+    }
+
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 8px;
+        display: block;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-control,
+    .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 14px 18px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: #fff;
+        width: 100%;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #4b7bec;
+        box-shadow: 0 0 0 0.2rem rgba(75, 123, 236, 0.25);
+        outline: none;
+        transform: translateY(-1px);
+    }
+
+    .form-control:hover,
+    .form-select:hover {
+        border-color: #ced4da;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .form-text {
+        color: #6c757d;
+        font-size: 0.875rem;
+        margin-top: 5px;
+        font-style: italic;
+    }
+
+    .character-count {
+        font-size: 0.8rem;
+        text-align: right;
+        margin-top: 6px;
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .character-count.warning {
+        color: #f39c12;
+        font-weight: 600;
+    }
+
+    .character-count.danger {
+        color: #e74c3c;
+        font-weight: 600;
+        animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.7; }
+        100% { opacity: 1; }
+    }
+
+    .file-upload {
+        border: 3px dashed #cbd5e0;
+        padding: 30px;
+        text-align: center;
+        border-radius: 15px;
+        background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+        cursor: pointer;
+        position: relative;
+        transition: all 0.3s ease;
+        min-height: 140px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .file-upload:hover {
+        border-color: #4b7bec;
+        background: linear-gradient(145deg, #e3f2fd, #bbdefb);
+        transform: translateY(-2px);
+    }
+
+    .file-upload-input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+    }
+
+    .file-upload-btn i {
+        font-size: 3rem;
+        color: #74b9ff;
+        margin-bottom: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .file-upload:hover .file-upload-btn i {
+        color: #0984e3;
+        transform: scale(1.1);
+    }
+
+    .file-upload-btn p {
+        margin: 5px 0;
+        color: #2d3436;
+        font-weight: 500;
+    }
+
+    .file-upload-btn .small {
+        color: #636e72;
+        font-size: 0.85rem;
+    }
+
+    .file-preview {
+        margin-top: 15px;
+        display: none;
+    }
+
+    .file-preview-item {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 12px 16px;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .file-preview-item i {
+        color: #4b7bec;
+        margin-right: 10px;
+        font-size: 1.2rem;
+    }
+
+    .btn-container {
+        display: flex;
+        gap: 15px;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 40px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 14px 28px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+        left: 100%;
+    }
+
+    .submit-btn {
+        background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+        color: white;
+        box-shadow: 0 8px 16px rgba(0, 184, 148, 0.3);
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(135deg, #00a085 0%, #008f76 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(0, 184, 148, 0.4);
+    }
+
+    .cancel-btn {
+        background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+        color: white;
+        box-shadow: 0 8px 16px rgba(253, 121, 168, 0.3);
+    }
+
+    .cancel-btn:hover {
+        background: linear-gradient(135deg, #e84393 0%, #d63384 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(253, 121, 168, 0.4);
+        text-decoration: none;
+        color: white;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .ticket-form-container {
+            padding: 15px;
+        }
+
+        .ticket-header {
+            padding: 25px 20px;
+        }
+
+        .ticket-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .ticket-form-body {
+            padding: 25px 20px;
+        }
+
+        .row {
+            margin: 0;
+        }
+
+        .row > [class*="col-"] {
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            flex-direction: column-reverse;
+            gap: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+            padding: 16px 20px;
+        }
+
+        .file-upload {
+            padding: 20px 15px;
+            min-height: 120px;
+        }
+
+        .file-upload-btn i {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .ticket-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .ticket-header p {
+            font-size: 1rem;
+        }
+
+        .form-control,
+        .form-select {
+            padding: 12px 16px;
+        }
+
+        .file-upload {
+            padding: 15px 10px;
+            min-height: 100px;
+        }
+
+        .file-upload-btn i {
+            font-size: 2rem;
+        }
+    }
+
+    /* Animation for form load */
+    .ticket-card {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Focus states for accessibility */
+    .btn:focus,
+    .form-control:focus,
+    .form-select:focus {
+        outline: 2px solid #4b7bec;
+        outline-offset: 2px;
+    }
+
+    /* Loading state for submit button */
+    .btn.loading {
+        pointer-events: none;
+        opacity: 0.7;
+    }
+
+    .btn.loading::after {
+        content: '';
+        width: 16px;
+        height: 16px;
+        border: 2px solid transparent;
+        border-top: 2px solid currentColor;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-left: 8px;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="ticket-form-container">
+        <div class="ticket-card">
+            <div class="ticket-header">
+                <h2 class="mb-0 text-white">
+                    <i class="bi bi-ticket-detailed"></i> Create New Support Ticket
+                </h2>
+                <p class="mb-0 text-white">Fill out the form below to submit your support request</p>
+            </div>
+
+            <div class="ticket-form-body">
+                <form method="post" enctype="multipart/form-data" id="ticket-form">
+                    {% csrf_token %}
+
+                    <!-- Debug: Remove this after testing -->
+                    {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <h4>Form Errors:</h4>
+                            {{ form.errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_title" class="form-label">Ticket Title</label>
+                                {{ form.title|add_class:"form-control" }}
+                                <small class="form-text">Briefly describe your issue</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_category" class="form-label">Category</label>
+                                {{ form.category|add_class:"form-select" }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_priority" class="form-label">Priority</label>
+                                {{ form.priority|add_class:"form-select" }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_department" class="form-label">Department</label>
+                                {{ form.department|add_class:"form-select" }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-check">
+                            {{ form.is_urgent|add_class:"form-check-input" }}
+                            <label class="form-check-label" for="id_is_urgent">
+                                Mark as Urgent
+                            </label>
+                            <small class="form-text d-block">Check this if your issue requires immediate attention</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="id_description" class="form-label">Detailed Description</label>
+                        {{ form.description|add_class:"form-control" }}
+                        <div class="character-count" id="description-counter">0/2000 characters</div>
+                        <small class="form-text">Please provide as much detail as possible about your issue</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Attachments (Optional)</label>
+                        <div class="file-upload" id="file-upload-area">
+                            <div class="file-upload-btn">
+                                <i class="bi bi-cloud-arrow-up"></i>
+                                <p class="mb-1">Click to upload files or drag and drop</p>
+                                <p class="small mb-0">Maximum file size: 5MB per file</p>
+                                <input type="file" name="attachment" class="file-upload-input" id="id_attachment" multiple>
+                            </div>
+                        </div>
+                        <div class="file-preview" id="file-preview"></div>
+                    </div>
+
+                    <div class="btn-container">
+                        <a href="{% url 'helpdesk:my_tickets' %}" class="btn cancel-btn">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn submit-btn" id="submit-btn">
+                            <i class="bi bi-send"></i> Submit Ticket
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Character count functionality
+        const descriptionField = document.getElementById('id_description');
+        const counterElement = document.getElementById('description-counter');
+
+        if (descriptionField && counterElement) {
+            function updateCharacterCount() {
+                const len = descriptionField.value.length;
+                counterElement.textContent = `${len}/2000 characters`;
+
+                // Remove all classes first
+                counterElement.classList.remove('warning', 'danger');
+
+                // Add appropriate class based on length
+                if (len > 1800) {
+                    counterElement.classList.add('danger');
+                } else if (len > 1500) {
+                    counterElement.classList.add('warning');
+                }
+            }
+
+            descriptionField.addEventListener('input', updateCharacterCount);
+            descriptionField.addEventListener('paste', function() {
+                setTimeout(updateCharacterCount, 10);
+            });
+
+            // Initial count
+            updateCharacterCount();
+        }
+
+        // File upload functionality
+        const fileInput = document.getElementById('id_attachment');
+        const filePreview = document.getElementById('file-preview');
+        const fileUploadArea = document.getElementById('file-upload-area');
+
+        if (fileInput && filePreview && fileUploadArea) {
+            // Drag and drop functionality
+            fileUploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.style.borderColor = '#4b7bec';
+                this.style.backgroundColor = 'rgba(75, 123, 236, 0.1)';
+            });
+
+            fileUploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.style.borderColor = '#cbd5e0';
+                this.style.backgroundColor = '';
+            });
+
+            fileUploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.style.borderColor = '#cbd5e0';
+                this.style.backgroundColor = '';
+
+                const files = e.dataTransfer.files;
+                fileInput.files = files;
+                displayFilePreview(files);
+            });
+
+            fileInput.addEventListener('change', function() {
+                displayFilePreview(this.files);
+            });
+
+            function displayFilePreview(files) {
+                filePreview.innerHTML = '';
+
+                if (files.length > 0) {
+                    filePreview.style.display = 'block';
+
+                    Array.from(files).forEach(function(file, index) {
+                        const preview = document.createElement('div');
+                        preview.className = 'file-preview-item';
+
+                        // File size formatting
+                        const fileSize = file.size < 1024 * 1024
+                            ? Math.round(file.size / 1024) + ' KB'
+                            : Math.round(file.size / (1024 * 1024) * 10) / 10 + ' MB';
+
+                        // File type icon
+                        let icon = 'bi-file-earmark';
+                        if (file.type.startsWith('image/')) {
+                            icon = 'bi-file-earmark-image';
+                        } else if (file.type.includes('pdf')) {
+                            icon = 'bi-file-earmark-pdf';
+                        } else if (file.type.includes('word')) {
+                            icon = 'bi-file-earmark-word';
+                        } else if (file.type.includes('excel') || file.type.includes('spreadsheet')) {
+                            icon = 'bi-file-earmark-excel';
+                        }
+
+                        preview.innerHTML = `
+                            <i class="bi ${icon}"></i>
+                            <span>${file.name} (${fileSize})</span>
+                        `;
+
+                        filePreview.appendChild(preview);
+                    });
+                } else {
+                    filePreview.style.display = 'none';
+                }
+            }
+        }
+
+        // Form submission with loading state
+        const form = document.getElementById('ticket-form');
+        const submitBtn = document.getElementById('submit-btn');
+
+        if (form && submitBtn) {
+            form.addEventListener('submit', function(e) {
+                // Basic validation
+                const title = document.getElementById('id_title');
+                const description = document.getElementById('id_description');
+
+                if (!title.value.trim()) {
+                    e.preventDefault();
+                    title.focus();
+                    showNotification('Please enter a ticket title', 'error');
+                    return;
+                }
+
+                if (!description.value.trim()) {
+                    e.preventDefault();
+                    description.focus();
+                    showNotification('Please provide a detailed description', 'error');
+                    return;
+                }
+
+                // Add loading state
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Submitting...';
+            });
+        }
+
+        // Simple notification function
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                z-index: 9999;
+                animation: slideInRight 0.3s ease;
+                max-width: 300px;
+            `;
+
+            if (type === 'error') {
+                notification.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+            } else {
+                notification.style.background = 'linear-gradient(135deg, #00b894, #00a085)';
+            }
+
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Smooth scrolling for form validation errors
+        const inputs = document.querySelectorAll('.form-control, .form-select');
+        inputs.forEach(input => {
+            input.addEventListener('invalid', function(e) {
+                e.preventDefault();
+                this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                this.focus();
+            });
+        });
+    });
+</script>
+{% endblock %}

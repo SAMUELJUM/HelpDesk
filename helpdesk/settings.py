@@ -30,6 +30,8 @@ INSTALLED_APPS = [
     'helpdes',
     'users',
     'knowledgebase',
+    'tickets',
+    "widget_tweaks",
 ]
 
 MIDDLEWARE = [
@@ -121,8 +123,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/'
-LOGIN_REDIRECT_URL = 'helpdesk:dashboard'
+LOGIN_REDIRECT_URL = '/users/redirect/'
+#LOGIN_REDIRECT_URL = 'role_redirect'
 #LOGIN_REDIRECT_URL = 'users:profile'
+LOGOUT_REDIRECT_URL = 'landing'
 
+
+# Ensure sessions are properly cleared on logout
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_AGE = 1209600
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 AUTH_USER_MODEL = 'users.User'

@@ -4,10 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import KnowledgeBaseArticle, ArticleCategory
 from .forms import ArticleForm, RatingForm
+from .models import KnowledgeBaseArticle
 
 @login_required
 def article_list(request):
-    articles = KnowledgeBaseArticle.objects.all()
+    articles = KnowledgeBaseArticle.objects.all().order_by('-created_at')
     return render(request, 'knowledgebase/article_list.html', {'articles': articles})
 
 @login_required
@@ -63,3 +64,16 @@ def rate_article(request, pk):
         form = RatingForm()
     return render(request, 'knowledgebase/rating_form.html', {'form': form, 'article': article})
 
+
+@login_required
+def delete_article(request, pk):
+    article = get_object_or_404(KnowledgeBaseArticle, pk=pk)
+
+    if request.user != article.author and not request.user.is_superuser:
+        return redirect('knowledgebase:article_list')
+
+    if request.method == 'POST':
+        article.delete()
+        return redirect('knowledgebase:article_list')
+
+    return render(request, 'knowledgebase/article_confirm_delete.html', {'article': article})
