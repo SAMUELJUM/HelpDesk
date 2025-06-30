@@ -1,6 +1,9 @@
 import os
 from pathlib import Path
 
+# Remove this line - it's causing potential conflicts
+# from django.conf.global_settings import EMAIL_BACKEND
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -122,12 +125,8 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/users/redirect/'
-#LOGIN_REDIRECT_URL = 'role_redirect'
-#LOGIN_REDIRECT_URL = 'users:profile'
 LOGOUT_REDIRECT_URL = 'landing'
-
 
 # Ensure sessions are properly cleared on logout
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -135,3 +134,30 @@ SESSION_COOKIE_AGE = 1209600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 AUTH_USER_MODEL = 'users.User'
+
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'jumasamuel237@gmail.com'
+EMAIL_HOST_PASSWORD = 'vprc xxpd pnsk wokp'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+
+# Email verification settings
+EMAIL_VERIFICATION_REQUIRED = True
+
+# Site configuration for email links
+SITE_ID = 1
+
+# Security settings for production
+if not DEBUG:
+    # Use secure email settings in production
+    EMAIL_USE_SSL = True  # Use SSL instead of TLS
+    EMAIL_PORT = 465  # SSL port
+
+    # Additional security headers
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'

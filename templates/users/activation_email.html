@@ -1,0 +1,14 @@
+<p>Hello {{ user.get_full_name|default:user.username }},</p>
+
+<p>Thank you for registering with Helpdesk ICT System. Please click the link below to activate your account:</p>
+
+<p>
+    <a href="{{ activation_link }}" style="padding:10px 15px; background-color:#007bff; color:white; text-decoration:none; border-radius:5px;">
+        Activate My Account
+    </a>
+</p>
+
+<p>If the button doesn't work, copy and paste this URL into your browser:</p>
+<p>{{ activation_link }}</p>
+
+<p>Regards,<br>Helpdesk ICT Support Team</p>

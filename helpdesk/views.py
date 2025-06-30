@@ -1,16 +1,11 @@
 from django.contrib.auth import login, authenticate
-from django.shortcuts import render, redirect
+from django.db.models import Count
 from django.utils import timezone
 from tickets.models import Ticket, TicketCategory
 from django.core.paginator import Paginator
-from django.contrib import messages
 from django.http import HttpResponse
 import csv
 from helpdesk.duration_filters import get_default_duration,DurationFilter
-#from .models import Ticket
-#from users.views import TEMP, ADMIN, EMP
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.shortcuts import render, get_object_or_404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required, user_passes_test

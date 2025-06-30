@@ -1,22 +1,30 @@
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
-from .views import landing, manage_users
+from .views import landing, manage_users, activate_account
 from .views import change_password
-#from .. import users
 
 app_name = 'users'
 
 urlpatterns = [
     # Authentication URLs
     path('manage-users/', manage_users, name='manage_users'),
-    #path('user_management/', users.views.user_management, name='user_management'),
     path('register/', views.register, name='register'),
     path('login/', views.login_view, name='login'),
     path('', views.landing, name='landing'),
     path('logout/', auth_views.LogoutView.as_view(
         next_page='landing'
     ), name='logout'),
+    path('activate/<uidb64>/<token>/', views.activate_account, name='activate'),
+
+    path('password_reset/', auth_views.PasswordResetView.as_view(
+        template_name='registration/password_reset_form.html'), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(
+        template_name='registration/password_reset_done.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+        template_name='registration/password_reset_confirm.html'), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(
+        template_name='registration/password_reset_complete.html'), name='password_reset_complete'),
 
     # Password Reset
     path('password-reset/',

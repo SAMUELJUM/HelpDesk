@@ -4,13 +4,24 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, update_session_auth_hash, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django import forms
+from django.template.loader import render_to_string
+from django.core.mail import EmailMessage
+from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
+from django.utils.encoding import force_bytes
+from .tokens import account_activation_token
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_protect
 from .forms import UserRegistrationForm, UserProfileForm, ProfileForm
 from .models import User, Ticket
+from django.core.exceptions import ImproperlyConfigured
 from django.contrib.auth.decorators import  user_passes_test
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
 
 
 # Constants for user types
@@ -23,24 +34,45 @@ EMP = 'EMP'
 # ----------------------------
 
 def register(request):
-    """Handle user registration with role assignment"""
+    """Handle user registration with email activation"""
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
 
-            # Normalize and validate user_type input from form POST data
-            user_type_input = request.POST.get('user_type', EMP)
-            user_type_input = user_type_input.upper()
-
-            if user_type_input not in [ADMIN, TECH, EMP]:
-                user.user_type = EMP
-            else:
-                user.user_type = user_type_input
-
+            # Assign role
+            user_type_input = request.POST.get('user_type', 'EMP').upper()
+            user.user_type = user_type_input if user_type_input in ['ADMIN', 'TECH', 'EMP'] else 'EMP'
+            user.is_active = False  # Require email activation
             user.save()
-            messages.success(request, "Registration successful! Please log in.")
-            return redirect('login')
+
+            try:
+                current_site = get_current_site(request)
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                token = account_activation_token.make_token(user)
+                activation_url = reverse('users:activate', kwargs={'uidb64': uid, 'token': token})
+                activation_link = f"http://{current_site.domain}{activation_url}"
+
+                print("ACTIVATION LINK:", activation_link)  # DEBUG print
+
+                subject = "Activate Your Helpdesk Account"
+                message = render_to_string("users/activation_email.html", {
+                    'user': user,
+                    'activation_link': activation_link,
+                })
+
+                email = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
+                email.content_subtype = "html"
+                email.send()
+
+                messages.success(request, "✅ Registration successful! Please check your email to activate your account before logging in.")
+                return redirect('login')
+
+            except Exception as e:
+                print("Email sending error:", str(e))
+                messages.error(request, "⚠️ Registration completed but email could not be sent. Contact admin.")
+
+                return redirect('login')
         else:
             messages.error(request, "Please correct the errors below.")
     else:
@@ -50,7 +82,6 @@ def register(request):
         'form': form,
         'user_types': {'ADMIN': 'Admin', 'TECH': 'Technician', 'EMP': 'Employee'}
     })
-
 
 
 def login_view(request):
@@ -410,3 +441,19 @@ def user_management(request):
     }
 
     return render(request, 'users/user_management.html', context)
+
+def activate_account(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        messages.success(request, "✅ Your account has been activated! You can now log in.")
+        return redirect('login')
+    else:
+        messages.error(request, "❌ Activation link is invalid or has expired.")
+        return render(request, 'users/activation_failed.html')
